@@ -8,7 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email']
 
-class MembershipSerialiser(serializers.ModelSerializer):
+class MembershipSerializer(serializers.ModelSerializer):
     """Serializes Memberships into usable API fields to be objectified in the front end"""
 
     # Use a serliased version of the user. Read only specifies Membership cant edit?
@@ -22,7 +22,7 @@ class TeamSerializer(serializers.ModelSerializer):
     """Serializes memberships into usable API fields to be objectified in the front end"""
 
     # Use a serliased version of the memberships. Many infers an array of all members?
-    memberships = MembershipSerialiser(many=True, read_only=True)
+    memberships = MembershipSerializer(many=True, read_only=True)
 
     class Meta:
         model = Team
@@ -34,7 +34,7 @@ class TeamSerializer(serializers.ModelSerializer):
 class OrganisationSerializer(serializers.ModelSerializer):
     """Serializes organisations into usable API fields to be objectified in the front end"""
     owner = UserSerializer(read_only=True)
-    team = TeamSerializer(read_only=True, many=True)
+    teams = TeamSerializer(read_only=True, many=True)
 
     class Meta:
         model = Organisation

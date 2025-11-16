@@ -125,7 +125,6 @@ class Team(models.Model):
 
 class Membership(models.Model):
     """Defines the connection between the team model and the parent organisation"""
-
     class MemberRoles(models.TextChoices):
         MEMBER = "MEMBER", "Member"
         LEADER = "LEADER", "Leader"

@@ -4,4 +4,5 @@ urlpatterns = [
     path('directory/', include('directory.urls')),
     path('workspace/', include('workspace.urls')),
     path('profile/', include('profile.urls')),
+    path('messaging/', include('messaging.urls')),
 ]

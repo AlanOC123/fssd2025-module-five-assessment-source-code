@@ -156,4 +156,4 @@ class Membership(models.Model):
         unique_together = ("user", "team")
     
     def __str__(self) -> str:
-        return f"{self.user.username} - {self.team.team_name} - ({self.get_role_display()})"
+        return f"{self.user.username} - {self.team.team_name} - ({self.role()})"

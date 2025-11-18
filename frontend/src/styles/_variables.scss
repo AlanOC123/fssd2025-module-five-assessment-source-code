@@ -1,0 +1,18 @@
+// Core Hues
+$primary-hue: 153;
+$secondary-hue: 333;
+
+$light-hue: 210;
+$dark-hue: 210;
+
+$primary-color: hsl($primary-hue, 100%, 50%);
+$secondary-color: hsl($secondary-hue, 100%, 50%);
+$light-color: hsl($light-hue, 17%, 98%);
+$dark-color: hsl($dark-hue, 10%, 23%);
+
+$primary: $primary-color;
+$secondary: $secondary-color;
+$light: $light-color;
+$dark: $dark-color;
+
+$border-radius-lg: 1rem;

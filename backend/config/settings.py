@@ -76,6 +76,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 REST_AUTH = {
     'USER_DETAILS_SERIALIZER': 'apps.users.serializers.UserSerializer',
+    'REGISTER_SERIALIZER': 'apps.users.serializers.CustomRegisterSerializer',
     'USE_JWT': True,
     'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer'
 }
@@ -120,8 +121,8 @@ if USE_POSTGRES:
             'NAME': config('DB_NAME'),
             'USER': config('DB_USER'),
             'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST', default='5432'),
-            'PORT': config('DB_PORT', default='127.0.0.1')  
+            'HOST': config('DB_HOST', default='127.0.0.1'),
+            'PORT': config('DB_PORT', default='5432')  
         }
     }
 

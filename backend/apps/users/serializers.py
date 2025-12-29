@@ -45,7 +45,7 @@ class UserSerializer(serializers.ModelSerializer):
         profile.location = profile_data.get('location', profile.location)
         profile.save()
 
-class CustomRegisterSerilizer(RegisterSerializer):
+class CustomRegisterSerializer(RegisterSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     date_of_birth = serializers.DateField(required=True)

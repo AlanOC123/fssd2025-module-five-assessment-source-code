@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: BaseLayoutProps) => {
         onSuccess: (newUser) => {
             console.log(newUser);
             queryClient.setQueryData(AUTH_KEYS.USER, newUser);
-            navigate("/dashboard");
+            navigate("/auth/login");
         },
         onError: (err) => {
             const { response } = err;
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }: BaseLayoutProps) => {
         onSuccess: () => {
             queryClient.setQueryData(AUTH_KEYS.USER, null);
             queryClient.clear();
-            navigate("/login");
+            navigate("/auth/login");
             toast.info(`Logged out successfully...`);
         },
         onError: (err) => {
@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }: BaseLayoutProps) => {
         registerCallback(() => {
             queryClient.setQueryData(AUTH_KEYS.USER, null);
             queryClient.clear();
-            navigate("login");
+            navigate("/auth/login");
         });
     }, [navigate, queryClient]);
 

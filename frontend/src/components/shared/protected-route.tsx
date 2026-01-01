@@ -18,7 +18,7 @@ export function ProtectedRoute({ children }: BaseLayoutProps) {
     }
 
     if (!user) {
-        return <Navigate to={"/login"} replace state={{ from: location }} />
+        return <Navigate to={"/auth/login"} replace state={{ from: location }} />
     }
 
     return children

@@ -13,7 +13,7 @@ import {
     EmailInputGroup,
     PasswordInputGroup,
     DateOfBirthInputGroup,
-} from "./form-inputs";
+} from "../form-inputs";
 import {
     ArrowLeftCircle,
     ArrowRightCircle,
@@ -55,8 +55,16 @@ function PersonalFieldSet({ onNext }: RegisterStepProps) {
                     </FieldDescription>
                 </div>
                 <div className="flex flex-col gap-4">
-                    <NameInputGroup isFirst />
-                    <NameInputGroup isFirst={false} />
+                    <NameInputGroup
+                        name={"firstName"}
+                        label="First Name"
+                        placeholder="Type First Name"
+                    />
+                    <NameInputGroup
+                        name={"lastName"}
+                        label="Last Name"
+                        placeholder="Type Last Name"
+                    />
                     <DateOfBirthInputGroup />
                 </div>
             </div>
@@ -95,8 +103,16 @@ function AccountFieldSet({ onNext, onPrev }: RegisterStepProps) {
                     </FieldDescription>
                 </div>
                 <div className="flex flex-col gap-4">
-                    <EmailInputGroup isConfirm={false} />
-                    <EmailInputGroup isConfirm />
+                    <EmailInputGroup
+                        name="email"
+                        label="Email"
+                        placeholder="name@example.com"
+                    />
+                    <EmailInputGroup
+                        name="confirmEmail"
+                        label="Confirm Email"
+                        placeholder="Type Email Again"
+                    />
                 </div>
             </div>
             <Field className="flex-row justify-between items-center w-full">
@@ -132,8 +148,8 @@ function SecurityFieldSet({ onPrev }: RegisterStepProps) {
                     </FieldDescription>
                 </div>
                 <div className="flex flex-col gap-4">
-                    <PasswordInputGroup isConfirm={false} />
-                    <PasswordInputGroup isConfirm />
+                    <PasswordInputGroup name="password" label="Password" placeholder="Create a Strong Password" />
+                    <PasswordInputGroup name="confirmPassword" label="Confirm Password" placeholder="Type Password Again" />
                 </div>
             </div>
             <Field className="flex-row justify-between items-center w-full">

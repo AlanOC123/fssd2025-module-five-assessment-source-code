@@ -5,7 +5,7 @@ import {
     getItemFromStorage,
     type StorageConfig,
 } from "@/utils";
-import { EmailInputGroup, PasswordInputGroup } from "./form-inputs";
+import { EmailInputGroup, PasswordInputGroup } from "../form-inputs";
 import { LogIn, Signature } from "lucide-react";
 import { loginSchema, type LoginFormData } from "./schema";
 import {
@@ -49,7 +49,7 @@ export function LoginWizard() {
             const { data } = response;
 
             if (data["non_field_errors"]) {
-                console.log(data)
+                console.log(data);
             }
         }
     };
@@ -63,14 +63,22 @@ export function LoginWizard() {
                 <FieldSet className="grid items-between h-full">
                     <div className="flex flex-col gap-8">
                         <div className="flex flex-col gap-2">
-                            <FieldLegend>Hello there!</FieldLegend>
+                            <FieldLegend>Welcome to Opus!</FieldLegend>
                             <FieldDescription>
-                                Enter your details below.
+                                Have an Account? Login Below
                             </FieldDescription>
                         </div>
                         <div className="flex flex-col gap-4">
-                            <EmailInputGroup />
-                            <PasswordInputGroup />
+                            <EmailInputGroup
+                                name="email"
+                                label="Email"
+                                placeholder="name@example.com"
+                            />
+                            <PasswordInputGroup
+                                name="password"
+                                label="Password"
+                                placeholder="Enter Password"
+                            />
                         </div>
                     </div>
                     <Field className="flex-col items-center justify-end w-full">
@@ -81,13 +89,24 @@ export function LoginWizard() {
                             <span>Log In</span>
                             <LogIn />
                         </Button>
-                        <Link className="inline-flex" to={"/register"}>
+                        <Link className="inline-flex" to={"/auth/register"}>
                             <Button
                                 className="inline-flex flex-1 items-center"
                                 variant={"secondary"}
                             >
                                 <span>Sign Up</span>
                                 <Signature />
+                            </Button>
+                        </Link>
+                        <Link
+                            className="inline-flex items-center justify-center"
+                            to={"/auth/password/reset"}
+                        >
+                            <Button
+                                variant={"link"}
+                                className="inline-flex flex-1 items-center"
+                            >
+                                Forgot Password?
                             </Button>
                         </Link>
                     </Field>

@@ -21,17 +21,17 @@ import {
 import { cn } from "@/lib";
 
 interface FormInputProps {
-    isFirst?: boolean;
-    isConfirm?: boolean;
+    name: string;
+    label: string;
+    placeholder: string;
 }
 
-export function NameInputGroup({ isFirst }: FormInputProps) {
+export function NameInputGroup({ name, label, placeholder }: FormInputProps) {
     const {
         register,
         formState: { errors, touchedFields },
         watch,
     } = useFormContext();
-    const name = isFirst ? "firstName" : "lastName";
     const value = watch(name);
 
     const showSuccessIcon = !errors[name] && value && typeof value === "string";
@@ -39,9 +39,7 @@ export function NameInputGroup({ isFirst }: FormInputProps) {
 
     return (
         <FieldGroup>
-            <FieldLabel htmlFor={name}>
-                {isFirst ? "First Name" : "Last Name"}
-            </FieldLabel>
+            <FieldLabel htmlFor={name}>{label}</FieldLabel>
             <InputGroup>
                 <InputGroupInput
                     className={cn(
@@ -54,7 +52,7 @@ export function NameInputGroup({ isFirst }: FormInputProps) {
                     data-valid={showSuccessIcon}
                     aria-invalid={showError}
                     type="text"
-                    placeholder={isFirst ? "Type First Name" : "Type Last Name"}
+                    placeholder={placeholder}
                     id={name}
                     {...register(name)}
                 />
@@ -119,13 +117,12 @@ export function DateOfBirthInputGroup() {
     );
 }
 
-export function EmailInputGroup({ isConfirm }: FormInputProps) {
+export function EmailInputGroup({ name, label, placeholder }: FormInputProps) {
     const {
         register,
         formState: { errors, touchedFields },
         watch,
     } = useFormContext();
-    const name = isConfirm ? "confirmEmail" : "email";
     const value = watch(name);
 
     const showSuccessIcon = !errors[name] && value && typeof value === "string";
@@ -133,12 +130,10 @@ export function EmailInputGroup({ isConfirm }: FormInputProps) {
 
     return (
         <FieldGroup>
-            <FieldLabel htmlFor={name}>
-                {isConfirm ? "Email Confirmation" : "Email"}
-            </FieldLabel>
+            <FieldLabel htmlFor={name}>{label}</FieldLabel>
             <InputGroup>
                 <InputGroupAddon>
-                    {isConfirm ? (
+                    {name.includes("confirm") ? (
                         <MailCheck
                             className={cn(
                                 showSuccessIcon
@@ -162,9 +157,7 @@ export function EmailInputGroup({ isConfirm }: FormInputProps) {
                 </InputGroupAddon>
                 <InputGroupInput
                     type="email"
-                    placeholder={
-                        isConfirm ? "Type Email Again" : "name@example.com"
-                    }
+                    placeholder={placeholder}
                     className={cn(
                         showSuccessIcon
                             ? "text-success"
@@ -192,14 +185,17 @@ export function EmailInputGroup({ isConfirm }: FormInputProps) {
     );
 }
 
-export function PasswordInputGroup({ isConfirm }: { isConfirm: boolean }) {
+export function PasswordInputGroup({
+    name,
+    label,
+    placeholder,
+}: FormInputProps) {
     const [showPassword, setShowPassword] = useState(false);
     const {
         register,
         formState: { errors, touchedFields },
         watch,
     } = useFormContext();
-    const name = isConfirm ? "confirmPassword" : "password";
     const value = watch(name);
 
     const showSuccessIcon = !errors[name] && value && typeof value === "string";
@@ -207,12 +203,10 @@ export function PasswordInputGroup({ isConfirm }: { isConfirm: boolean }) {
 
     return (
         <FieldGroup>
-            <FieldLabel htmlFor={name}>
-                {isConfirm ? "Password Confirmation" : "Password"}
-            </FieldLabel>
+            <FieldLabel htmlFor={name}>{label}</FieldLabel>
             <InputGroup>
                 <InputGroupAddon>
-                    {isConfirm ? (
+                    {name.includes("confirm") ? (
                         <BadgeCheck
                             className={cn(
                                 showSuccessIcon
@@ -236,9 +230,7 @@ export function PasswordInputGroup({ isConfirm }: { isConfirm: boolean }) {
                 </InputGroupAddon>
                 <InputGroupInput
                     type={showPassword ? "text" : "password"}
-                    placeholder={
-                        isConfirm ? "Type Password Again" : "Type Password"
-                    }
+                    placeholder={placeholder}
                     className={cn(
                         showSuccessIcon
                             ? "text-success"

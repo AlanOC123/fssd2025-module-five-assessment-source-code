@@ -9,11 +9,6 @@ export function PublicOnlyRoute({ children }: BaseLayoutProps) {
 
     if (!auth) throw new Error("Invalid context");
 
-    console.log("PublicRoute State:", {
-        isLoading: auth?.isLoading,
-        user: auth?.user,
-    });
-
     const { user, isLoading } = auth;
 
     if (isLoading) {

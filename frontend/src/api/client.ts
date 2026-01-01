@@ -21,8 +21,7 @@ let failedQueue: QueueItem[] = [];
 
 export const registerCallback = (cb: () => void) => {
     logoutCallback = cb;
-}
-
+};
 
 function getCookie(name: string) {
     let cookieVal = null;
@@ -56,75 +55,53 @@ function processQueue(error: Error | null, token: unknown = null) {
     });
 
     failedQueue = [];
-};
+}
 
 // Response interceptor
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
-        // Get original request config
-        const originalRequest = error.config as ExtendedAxiosRequestConfig;
+        const originalConfig = error.config;
 
-        if (!originalRequest) {
-            return Promise.reject(error);
+        if (error.response?.status !== 401) { return Promise.reject(error) }
+
+        if (originalConfig.url?.includes(ENDPOINTS.AUTH.TOKEN_REFRESH)) {
+            console.log(originalConfig.url);
+            return Promise.reject(error)
         }
 
-        // Check status. If its forbidden and we havent retried handle it
-        if (error.response?.status === 401 && !originalRequest._retry) {
-            // If its already made an attempt add it to the queue and try again when unblocked
-            if (isRefreshing) {
-                return new Promise<unknown>((resolve, reject) => {
-                    failedQueue.push({ resolve, reject });
-                })
-                    .then(() => api(originalRequest))
-                    .catch((error) => Promise.reject(error));
-            }
+        if (!originalConfig._retry) {
+            originalConfig._retry = true;
 
-            // Set blocker flags
-            originalRequest._retry = true;
-            isRefreshing = true;
-
-            // Interceptor logic
             try {
-                // Try get a refresh token
                 await api.post(ENDPOINTS.AUTH.TOKEN_REFRESH);
-
-                // If successful process the queue (resolve the token) and try again
-                processQueue(null);
-                return api(originalRequest);
-            } catch (refreshError) {
-                // If error process queue with an error and navigate to login
-
-                const err =
-                    refreshError instanceof Error
-                        ? refreshError
-                        : new Error("Refresh failed");
-                processQueue(err, null);
-                
-                if (logoutCallback) {
-                    logoutCallback()
-                }
-
-                return Promise.reject(error);
-            } finally {
-                // Unblock
-                isRefreshing = false;
+                return api(originalConfig);
+            } catch (error) {
+                return Promise.reject(error)
             }
         }
 
-        // For none 401 status reject
         return Promise.reject(error);
     }
 );
 
-api.interceptors.request.use((config) => {
-    if (["post", "put", "patch", "delete"].includes(config.method?.toLowerCase() as string)) {
-        const csrfToken = getCookie("csrftoken");
+api.interceptors.request.use(
+    (config) => {
+        if (
+            ["post", "put", "patch", "delete"].includes(
+                config.method?.toLowerCase() as string
+            )
+        ) {
+            const csrfToken = getCookie("csrftoken");
 
-        if (csrfToken) {
-            config.headers["X-CSRFToken"] = csrfToken;
+            if (csrfToken) {
+                config.headers["X-CSRFToken"] = csrfToken;
+            }
         }
-    }
 
-    return config;
-}, (error) => Promise.reject(error))
+        console.log(config)
+
+        return config;
+    },
+    (error) => Promise.reject(error)
+);

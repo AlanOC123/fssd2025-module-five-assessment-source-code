@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from users.models import UserProfile
+from apps.users.models import UserProfile
 from typing import cast, TYPE_CHECKING, Dict, Any
 from dj_rest_auth.registration.serializers import RegisterSerializer
 
@@ -11,10 +11,11 @@ if TYPE_CHECKING:
         class Meta:
             abstract = True
 else:
-    UserWithProfile: User
+    UserWithProfile = User
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
+        model = UserProfile
         fields = [
             "first_name", 'last_name', "date_of_birth", 
             "bio", "location", "role", 
@@ -27,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer()
 
     class Meta:
+        model = User
         fields = [
             "id", "email", "profile"
         ]
@@ -46,6 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
         profile.save()
 
 class CustomRegisterSerializer(RegisterSerializer):
+    username = None
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     date_of_birth = serializers.DateField(required=True)
@@ -60,6 +63,10 @@ class CustomRegisterSerializer(RegisterSerializer):
     
     def save(self, request) -> Any:
         user: UserWithProfile = super().save(request)
+        if user.username != user.email:
+            user.username = user.email
+            user.save(update_fields=["username"])
+
         val_data = cast(Dict[str, Any], self.validated_data)
 
         user.profile.first_name = val_data.get('first_name', '')
@@ -67,3 +74,4 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.profile.date_of_birth = val_data.get('date_of_birth', '')
 
         user.profile.save()
+        return user

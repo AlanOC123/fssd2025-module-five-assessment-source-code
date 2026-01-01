@@ -4,9 +4,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class UserProfile(models.Model):
-    first_name = models.CharField(verbose_name="First Name", max_length=30)
-    last_name = models.CharField(verbose_name="Last Name", max_length=40)
-    date_of_birth = models.DateField(verbose_name="Date of Birth")
+    first_name = models.CharField(verbose_name="First Name", max_length=30, null=True, blank=True)
+    last_name = models.CharField(verbose_name="Last Name", max_length=40, null=True, blank=True)
+    date_of_birth = models.DateField(verbose_name="Date of Birth", null=True, blank=True)
     user = models.OneToOneField(to=User, verbose_name="User", related_name="profile", on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, null=True, blank=True)
     location = models.CharField(max_length=100, null=True, blank=True)

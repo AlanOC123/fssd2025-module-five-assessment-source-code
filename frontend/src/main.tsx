@@ -24,11 +24,12 @@ import "@fontsource/inter/900-italic.css";
 
 import "./index.css";
 import App from "./App.tsx";
+import { AuthProvider } from "./features";
 
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            retry: 1,
+            retry: false,
             staleTime: 1000 * 60 * 5,
         },
     },
@@ -38,7 +39,9 @@ createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
-                <App />
+                <AuthProvider>
+                    <App />
+                </AuthProvider>
             </BrowserRouter>
         </QueryClientProvider>
     </StrictMode>

@@ -21,6 +21,8 @@ const SAVEABLE_FIELDS: (keyof StorageConfig["auth_items"])[] = [
     "email",
 ];
 
+import { postRegister } from "../../api";
+
 type SaveableKey = keyof StorageConfig["auth_items"];
 const isSaveableField = (key: string): key is SaveableKey => {
     return (SAVEABLE_FIELDS as string[]).includes(key)
@@ -86,15 +88,22 @@ export function RegisterWizard() {
         }
     };
 
-    const handleSubmit = (data: RegisterFormData) => {
-        console.log(data);
+    const handleSubmit = async (payload: RegisterFormData) => {
+        try {
+            const { response } = await postRegister(payload);
+            console.log(response);
+        } catch (err) {
+            const { response } = err;
+            const { data } = response;
+            console.log(data);
+        }
     };
 
     return (
         <FormProvider {...methods}>
             <form
                 onSubmit={methods.handleSubmit(handleSubmit)}
-                className="min-w-xs max-w-3xl w-4/5 h-3/5 z-1 grid grid-rows-[1fr_auto] gap-8"
+                className="min-w-xs max-w-xl w-4/5 h-3/5 z-1 grid grid-rows-[1fr_auto] gap-8"
             >
                 <Tabs
                     value={currStep}

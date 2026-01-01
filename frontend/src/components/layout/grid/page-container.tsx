@@ -1,5 +1,6 @@
 import { cn } from "@/lib";
 import { type BaseLayoutProps } from "@/types";
+import { Toaster } from "@/components/ui";
 
 function PageContainer({
     children,
@@ -16,6 +17,7 @@ function PageContainer({
             {...props}
         >
             {children}
+            <Toaster />
         </main>
     );
 }

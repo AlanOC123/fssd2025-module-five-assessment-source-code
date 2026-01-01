@@ -20,7 +20,12 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib";
 
-export function NameInputGroup({ isFirst }: { isFirst: boolean }) {
+interface FormInputProps {
+    isFirst?: boolean;
+    isConfirm?: boolean;
+}
+
+export function NameInputGroup({ isFirst }: FormInputProps) {
     const {
         register,
         formState: { errors, touchedFields },
@@ -114,7 +119,7 @@ export function DateOfBirthInputGroup() {
     );
 }
 
-export function EmailInputGroup({ isConfirm }: { isConfirm: boolean }) {
+export function EmailInputGroup({ isConfirm }: FormInputProps) {
     const {
         register,
         formState: { errors, touchedFields },

@@ -1,8 +1,13 @@
 import { AuthLayout } from "@/layouts";
 import { RegisterWizard } from "@/features";
+import { PublicOnlyRoute } from "@/components";
 
 function RegisterPage() {
-    return <AuthLayout title="Register">{<RegisterWizard />}</AuthLayout>;
+    return (
+        <PublicOnlyRoute>
+            <AuthLayout title="Register">{<RegisterWizard />}</AuthLayout>;
+        </PublicOnlyRoute>
+    );
 }
 
 export { RegisterPage };

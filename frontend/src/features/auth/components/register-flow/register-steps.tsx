@@ -18,7 +18,9 @@ import {
     ArrowLeftCircle,
     ArrowRightCircle,
     UserRoundCheck,
+    LogIn,
 } from "lucide-react";
+import { Link } from "react-router";
 
 interface TabContentContainerProps {
     value: RegisterStep;
@@ -58,7 +60,18 @@ function PersonalFieldSet({ onNext }: RegisterStepProps) {
                     <DateOfBirthInputGroup />
                 </div>
             </div>
-            <Field className="flex-row justify-end items-center w-full">
+            <Field className="flex-row justify-between items-center w-full">
+                <Link to={"/login"}>
+                    {" "}
+                    <Button
+                        className="max-w-fit inline-flex items-center"
+                        variant={"secondary"}
+                    >
+                        <span>Log In</span>
+                        <LogIn />
+                    </Button>
+                </Link>
+
                 <Button
                     className="max-w-fit inline-flex items-center"
                     onClick={onNext}
@@ -132,7 +145,10 @@ function SecurityFieldSet({ onPrev }: RegisterStepProps) {
                     <ArrowLeftCircle />
                     <span>Previous Step</span>
                 </Button>
-                <Button className="inline-flex flex-1 items-center" type="submit">
+                <Button
+                    className="inline-flex flex-1 items-center"
+                    type="submit"
+                >
                     <span>Create Account</span>
                     <UserRoundCheck />
                 </Button>

@@ -1,9 +1,9 @@
 import axios from "axios";
-import type { InternalAxiosRequestConfig } from "axios";
+const ROOT = "/api"
 
 // Axios instance
 export const api = axios.create({
-    baseURL: "/api",
+    baseURL: ROOT,
     withCredentials: true,
     headers: {
         "Content-Type": "application/json",

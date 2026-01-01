@@ -1,9 +1,14 @@
 import { api } from "@/lib";
 import { type InternalAxiosRequestConfig } from "axios";
+import { ENDPOINTS } from "./endpoints";
+
+export { api };
 
 interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
     _retry?: boolean;
 }
+
+let logoutCallback: (() => void) | null = null;
 
 interface QueueItem {
     resolve: (value?: unknown) => void;
@@ -13,6 +18,10 @@ interface QueueItem {
 // Response flags and reducers
 let isRefreshing = false;
 let failedQueue: QueueItem[] = [];
+
+export const registerCallback = (cb: () => void) => {
+    logoutCallback = cb;
+}
 
 
 function getCookie(name: string) {
@@ -78,7 +87,7 @@ api.interceptors.response.use(
             // Interceptor logic
             try {
                 // Try get a refresh token
-                await api.post("/auth/token/refresh/");
+                await api.post(ENDPOINTS.AUTH.TOKEN_REFRESH);
 
                 // If successful process the queue (resolve the token) and try again
                 processQueue(null);
@@ -91,7 +100,11 @@ api.interceptors.response.use(
                         ? refreshError
                         : new Error("Refresh failed");
                 processQueue(err, null);
-                window.location.href = "/login"; // Replace this with react router navigate eventually
+                
+                if (logoutCallback) {
+                    logoutCallback()
+                }
+
                 return Promise.reject(error);
             } finally {
                 // Unblock

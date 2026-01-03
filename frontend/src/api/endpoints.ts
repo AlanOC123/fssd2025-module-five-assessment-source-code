@@ -8,4 +8,9 @@ export const ENDPOINTS = {
         REQUEST_RESET: "auth/password/reset/",
         REQUEST_CONFIRM_SUBMIT: 'auth/password/reset/confirm/submit/'
     },
+    PROJECTS: {
+        BASE: "projects/",
+        GET_BY_ID: (id: number) => `projects/${id}/`,
+        TOGGLE_PIN: (id: number) => `projects/${id}/pin/`,
+    }
 };

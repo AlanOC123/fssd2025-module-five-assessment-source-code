@@ -16,7 +16,7 @@ export function PublicOnlyRoute({ children }: BaseLayoutProps) {
     }
 
     if (user) {
-        return <Navigate to={"/dashboard"} replace state={{ from: location }}/>
+        return <Navigate to={"/"} replace state={{ from: location }}/>
     }
 
     return <>{children}</>;

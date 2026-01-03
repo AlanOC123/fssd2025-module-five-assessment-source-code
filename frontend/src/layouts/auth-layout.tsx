@@ -2,39 +2,29 @@ import {
     PageContainer,
     PageSection,
     PageItem,
-    Typography,
     AuroraBackground,
+    PublicOnlyRoute,
 } from "@/components";
 import { type BaseLayoutProps } from "@/types";
 import { cn } from "@/lib";
-
-interface AuthLayoutProps extends BaseLayoutProps {
-    title: string;
-}
+import { Outlet } from "react-router";
 
 function AuthLayout({
-    title,
-    children,
     className,
     ...props
-}: AuthLayoutProps) {
+}: BaseLayoutProps) {
     return (
-        <PageContainer className={cn(className)} {...props}>
-            <PageSection className="place-content-center">
-                <PageItem className="relative" colspan="full">
-                    <AuroraBackground className="z-0">
-                        <Typography
-                            as={"h1"}
-                            variant={"h1"}
-                            className="text-left z-1 mb-8"
-                        >
-                            {title}
-                        </Typography>
-                        {children}
-                    </AuroraBackground>
-                </PageItem>
-            </PageSection>
-        </PageContainer>
+        <PublicOnlyRoute>
+            <PageContainer className={cn(className)} {...props}>
+                <PageSection className="place-content-center">
+                    <PageItem className="relative" colspan="full">
+                        <AuroraBackground className="z-0">
+                            <Outlet />
+                        </AuroraBackground>
+                    </PageItem>
+                </PageSection>
+            </PageContainer>
+        </PublicOnlyRoute>
     );
 }
 

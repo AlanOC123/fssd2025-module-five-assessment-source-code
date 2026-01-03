@@ -1,7 +1,7 @@
 import { cn } from "@/lib";
 import { type BaseLayoutProps } from "@/types";
 
-export type ColSpanKey = "full" | "half" | "third" | "quarter"; 
+export type ColSpanKey = "full" | "threeQuarters" | "half" | "third" | "quarter"; 
 
 interface PageItemProps extends BaseLayoutProps {
     colspan?: ColSpanKey,
@@ -9,6 +9,7 @@ interface PageItemProps extends BaseLayoutProps {
 
 const SPAN_CLASSES: Record<ColSpanKey, string> = {
     full: "col-span-4 md:col-span-8 lg:col-span-12",
+    threeQuarters: "col-span-4 md:col-span-8 lg:col-span-8",
     half: "col-span-4 md:col-span-4 lg:col-span-6",
     third: "col-span-4 md:col-span-4 lg:col-span-4",
     quarter: "col-span-2 md:col-span-2 lg:col-span-3",

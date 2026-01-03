@@ -11,3 +11,6 @@ export * from './input-group';
 export * from './sonner';
 export * from './spinner';
 export * from './empty';
+export * from './floating-dock';
+export * from './sidebar';
+export * from './animated-modal';

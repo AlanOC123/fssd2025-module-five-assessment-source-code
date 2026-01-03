@@ -1,20 +1,23 @@
-import { ProtectedRoute, Button } from "@/components";
+import { Button, PageItem, PageSection, PageTitle } from "@/components";
 import { useAuth } from "@/features";
 
 export function HomePage() {
-    const auth = useAuth();
-
-    if (!auth) {
-        throw new Error("Invalid auth context...")
-    }
-
-    const { logout } = auth;
+    const { logout } = useAuth();
 
     return (
-        <ProtectedRoute>
-            <div className="h-screen w-screen flex items-center justify-center">
-                <Button variant={"destructive"} onClick={logout}>Logout</Button>
-            </div>
-        </ProtectedRoute>
-    )
+        <>
+            <PageSection>
+                <PageItem colspan="full">
+                    <PageTitle>Home</PageTitle>
+                </PageItem>
+            </PageSection>
+            <PageSection>
+                <PageItem className="flex items-center justify-center" colspan="full">
+                    <Button variant={"destructive"} onClick={logout}>
+                        Logout
+                    </Button>
+                </PageItem>
+            </PageSection>
+        </>
+    );
 }

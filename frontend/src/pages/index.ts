@@ -3,3 +3,7 @@ export * from './login-page';
 export * from './home-page';
 export * from './reset-password-page';
 export * from './confirm-password-reset-page'
+export * from './projects-page';
+export * from './settings-page';
+export * from './profile-page';
+export * from './inbox-page';

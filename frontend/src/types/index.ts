@@ -6,7 +6,7 @@ export interface BaseComponentProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export interface BaseLayoutProps extends HTMLAttributes<HTMLDivElement> {
-    children: ReactNode;
+    children?: ReactNode;
     className?: string;
 }
 
@@ -23,5 +23,6 @@ export interface UserProfile {
 export interface User {
     id: number,
     email: string,
+    username: string,
     profile: UserProfile
 }

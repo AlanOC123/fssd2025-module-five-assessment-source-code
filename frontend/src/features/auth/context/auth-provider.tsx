@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }: BaseLayoutProps) => {
         onSuccess: (newUser) => {
             queryClient.setQueryData(AUTH_KEYS.USER, newUser);
             toast.success(`Logged in successfully...`);
-            navigate("/dashboard");
+            navigate("/");
         },
         onError: (err) => {
             const { response } = err;

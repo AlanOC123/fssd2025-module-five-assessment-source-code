@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # Apps
     'apps.users',
+    'apps.projects',
 ]
 
 SITE_ID = 1
@@ -80,6 +81,7 @@ ACCOUNT_SIGNUP_FIELDS = [
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 PASSWORD_RESET_REDIRECT_LINK = "http://localhost:5173/auth"
+AUTH_USER_MODEL = 'auth.User'
 
 REST_AUTH = {
     'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',

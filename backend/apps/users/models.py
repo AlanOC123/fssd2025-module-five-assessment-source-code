@@ -11,6 +11,7 @@ class UserProfile(models.Model):
     bio = models.TextField(max_length=500, null=True, blank=True)
     location = models.CharField(max_length=100, null=True, blank=True)
     role = models.CharField(max_length=50, default="Member")
+    profile = models.ImageField
 
     @property
     def full_name(self) -> str:

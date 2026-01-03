@@ -19,7 +19,9 @@ urlpatterns = [
     path('api/auth/token/refresh/', get_refresh_view().as_view(), name="token_refresh"),
     path('api/auth/password/reset/', PasswordResetView.as_view(), name="password_reset"),
     path('api/auth/password/reset/confirm/<uidb64>/<token>/', email_confirmation_redirect,  name="password_reset_confirm"),
-    path('api/auth/password/reset/confirm/submit/', PasswordResetConfirmView.as_view(), name="password_reset_change")
+    path('api/auth/password/reset/confirm/submit/', PasswordResetConfirmView.as_view(), name="password_reset_change"),
+
+    path("api/projects/", include("apps.projects.urls"))
 ]
 
 if settings.DEBUG:

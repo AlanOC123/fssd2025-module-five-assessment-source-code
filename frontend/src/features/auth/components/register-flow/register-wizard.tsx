@@ -3,11 +3,13 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PersonalStep, AccountStep, SecurityStep } from "./register-steps";
 import { Tabs, TabsList, TabsTrigger } from "@/components";
+
 import {
     addItemToStorage,
     getItemFromStorage,
     type StorageConfig,
 } from "@/utils";
+
 import {
     registerSchema,
     type RegisterFormData,

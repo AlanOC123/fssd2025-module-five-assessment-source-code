@@ -41,12 +41,13 @@ export interface PinnedProject {
 }
 
 export interface GetProjectParams {
-    query?: string
+    search?: string
 }
 
 export interface CreateProjectDTO {
     title: string;
-    description: string;
+    description?: string;
     start_data?: string;
     end_date?: string;
+    status: "pending" | "active"
 }

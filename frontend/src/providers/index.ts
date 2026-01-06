@@ -1,2 +1,2 @@
-export * from './app';
-export * from './theme';
+export * from './app-provider'
+export * from './theme-provider';

@@ -26,6 +26,11 @@ class ProjectMembershipSerializer(serializers.ModelSerializer):
             "date_sent"
         ]
 
+class ProjectCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ["title", "description", "start_date", "end_date", "status"]
+
 class ProjectListSerializer(serializers.ModelSerializer):
     owner = ProjectUserSerializer(source="owner.profile", read_only=True)
     is_pinned = serializers.BooleanField(read_only=True)

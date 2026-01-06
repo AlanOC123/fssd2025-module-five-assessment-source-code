@@ -1,5 +1,5 @@
 from .models import Project, PinnedProject
-from .serializers import ProjectListSerializer, ProjectDetailSerializer
+from .serializers import ProjectListSerializer, ProjectDetailSerializer, ProjectCreateSerializer
 from rest_framework import viewsets, permissions, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -14,6 +14,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "retrieve":
             return ProjectDetailSerializer
+        
+        if self.action == "create":
+            return ProjectCreateSerializer
         
         return ProjectListSerializer
 

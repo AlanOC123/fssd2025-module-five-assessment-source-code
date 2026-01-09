@@ -1,5 +1,5 @@
-import { PasswordConfirmWizard } from "@/features";
+import { ConfirmPasswordResetForm } from "@/features";
 
 export function ConfirmPasswordResetPage() {
-    return <PasswordConfirmWizard />;
+    return <ConfirmPasswordResetForm />;
 }

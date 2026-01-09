@@ -1,4 +1,6 @@
-import { StorageMapKey, type StorageConfig } from "./schema";
+import type { StorageConfig } from "@/types";
+import { StorageMapKey } from "./schema";
+
 
 export const getItemFromStorage = <
     G extends keyof StorageConfig,

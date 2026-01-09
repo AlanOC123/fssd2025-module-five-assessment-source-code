@@ -9,7 +9,7 @@ function PageSection({
     return (
         <section
             className={cn(
-                "col-span-4 md:col-span-8 lg:col-span-12 grid grid-cols-subgrid auto-rows-auto grid-flow-dense overflow-x-hidden w-full",
+                "col-span-4 md:col-span-8 lg:col-span-12 grid grid-cols-subgrid auto-rows-auto grid-flow-dense w-full overflow-auto",
                 className
             )}
             {...props}

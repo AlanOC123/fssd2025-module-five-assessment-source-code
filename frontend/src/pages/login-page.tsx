@@ -1,7 +1,7 @@
-import { LoginWizard } from "@/features";
+import { LoginForm } from "@/features";
 
 function LoginPage() {
-    return <LoginWizard />;
+    return <LoginForm />;
 }
 
 export { LoginPage };

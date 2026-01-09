@@ -1,5 +1,5 @@
-import { PasswordResetWizard } from "@/features";
+import { RequestPasswordResetForm } from "@/features";
 
 export function ResetPasswordPage() {
-    return <PasswordResetWizard />;
+    return <RequestPasswordResetForm />;
 }

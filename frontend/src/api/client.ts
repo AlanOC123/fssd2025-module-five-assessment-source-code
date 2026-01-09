@@ -2,7 +2,7 @@ import { api } from "@/lib";
 import { type InternalAxiosRequestConfig } from "axios";
 import { ENDPOINTS } from "./endpoints";
 
-export { api };
+export { api as client };
 
 interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
     _retry?: boolean;
@@ -66,7 +66,6 @@ api.interceptors.response.use(
         if (error.response?.status !== 401) { return Promise.reject(error) }
 
         if (originalConfig.url?.includes(ENDPOINTS.AUTH.TOKEN_REFRESH)) {
-            console.log(originalConfig.url);
             return Promise.reject(error)
         }
 
@@ -98,8 +97,6 @@ api.interceptors.request.use(
                 config.headers["X-CSRFToken"] = csrfToken;
             }
         }
-
-        console.log(config)
 
         return config;
     },

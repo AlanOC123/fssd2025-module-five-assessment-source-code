@@ -1,20 +1,20 @@
-import { createProject } from "../api";
+import { createProject } from "../services";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { type CreateProjectDTO } from "../types";
+import { type CreateProjectData } from "../types";
 import { toast } from "sonner";
+import { LIST_PROJECTS_QUERY_KEY } from './keys';
 
 export function useCreateProject() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (payload: CreateProjectDTO) => createProject(payload),
+        mutationFn: (payload: CreateProjectData) => createProject(payload),
 
         onError: () => toast.error("Error creating project"),
 
         onSuccess: () => {
             toast.success("Project created!");
-
-            queryClient.invalidateQueries({ queryKey: ["projects"] });
+            queryClient.invalidateQueries({ queryKey: LIST_PROJECTS_QUERY_KEY() });
         },
     });
 }

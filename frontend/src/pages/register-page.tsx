@@ -1,7 +1,7 @@
-import { RegisterWizard } from "@/features";
+import { RegisterForm } from "@/features";
 
 function RegisterPage() {
-    return <RegisterWizard />;
+    return <RegisterForm />;
 }
 
 export { RegisterPage };

@@ -10,19 +10,13 @@ export interface BaseLayoutProps extends HTMLAttributes<HTMLDivElement> {
     className?: string;
 }
 
-export interface UserProfile {
-    first_name: string;
-    last_name: string;
-    date_of_birth: string;
-    location: string | null;
-    bio: string | null;
-    role: string;
-    full_name: string;
-}
+export const STORAGE_PREFIX = "_APP_STORAGE";
 
-export interface User {
-    id: number,
-    email: string,
-    username: string,
-    profile: UserProfile
-}
+export type StorageConfig = {
+    auth_items: {
+        first_name: string;
+        last_name: string;
+        date_of_birth: string;
+        email: string;
+    };
+};

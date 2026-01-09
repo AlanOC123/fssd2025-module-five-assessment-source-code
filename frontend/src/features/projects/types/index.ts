@@ -1,53 +1,44 @@
-import { type UserProfile } from "@/types"
+import * as z from 'zod'
+import { createProjectSchema, updateProjectSchema } from '../forms';
+import { type UserProfile } from "@/features/users";
 
-interface ProjectMember {
-    id: number, 
-    email: string, 
-    full_name: string
+export type ProjectStatus = "pending" | "active" | "complete" | "archived";
+export type AccessLevel = "viewer" | "editor" | "admin";
+export type MembershipStatus = "pending" | "active" | "rejected";
+
+export interface ProjectListItem {
+    id: number;
+    title: string;
+    status: ProjectStatus,
+    owner: UserProfile,
+    updated_at: string;
+    is_pinned: boolean;
 }
 
-interface ProjectMembership {
-    user: ProjectMember;
-    access_level: "Viewer" | "Editor" | "Admin";
-    status: "Pending (Invite Sent)" | "Active (Invite Accepted)" | "Rejected";
+export interface ProjectMember {
+    id: number;
+    user: UserProfile;
+    access_level: AccessLevel;
+    status: MembershipStatus;
     date_sent: string;
 }
 
-export interface ProjectList {
-    id: number;
-    title: string;
-    status: string;
-    owner: ProjectMember;
-    updated_at: string;
-}
-
-export interface ProjectDetail {
-    id: number;
-    title: string;
-    description: string;
-    status: "Pending" | "Active" | "Complete" | "Archived";
-    owner: ProjectMember;
-    owner_detail: UserProfile;
-    members: ProjectMembership[];
+export interface ProjectDetailItem extends ProjectListItem {
+    description: string | null;
+    members: ProjectMember[];
     created_at: string;
-    start_date: string;
-    end_date: string;
-    updated_at: string;
+    start_date: string | null;
+    end_date: string | null;
 }
 
 export interface PinnedProject {
-    status: string,
-    is_pinned: boolean
+    status: string;
+    is_pinned: boolean;
 }
 
-export interface GetProjectParams {
-    search?: string
+export type ProjectQueryParam = {
+    query: string | null
 }
 
-export interface CreateProjectDTO {
-    title: string;
-    description?: string;
-    start_data?: string;
-    end_date?: string;
-    status: "pending" | "active"
-}
+export type CreateProjectData = z.infer<typeof createProjectSchema>
+export type UpdateProjectData = z.infer<typeof updateProjectSchema>

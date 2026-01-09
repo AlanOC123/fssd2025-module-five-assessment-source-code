@@ -156,10 +156,32 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+@layer utilities {
+    /* Chrome, Edge, and Safari */
+    ::-webkit-scrollbar {
+        width: 8px; /* Much thinner than default 16px */
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent; /* The track is invisible */
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-muted-foreground/20 rounded-full; /* Subtle grey pill */
+        border: 2px solid transparent; /* Creates padding effect */
+        background-clip: content-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-muted-foreground/40; /* Darker on hover */
     }
 }

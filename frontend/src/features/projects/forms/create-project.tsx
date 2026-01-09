@@ -80,7 +80,6 @@ export function CreateProjectForm() {
 
     return (
         <Sheet open={isCreateProjectOpen} onOpenChange={toggleCreateProject}>
-            <CreateProjectButton />
             <SheetContent className="w-full" side="right">
                 <FormProvider {...methods}>
                     <form

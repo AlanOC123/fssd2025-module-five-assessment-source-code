@@ -1,23 +1,36 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { updateProject } from "../api";
+import { updateProject } from "../services";
 import { toast } from "sonner";
-import { type ProjectDetail } from "../types";
+import { type UpdateProjectData } from "../types";
+import { DETAILED_PROJECT_QUERY_KEY, LIST_PROJECTS_QUERY_KEY } from "./keys";
 
-export function useUpdateProject(id: number) {
+export function useUpdateProject() {
     const queryClient = useQueryClient();
+
     return useMutation({
-        mutationFn: (payload: Partial<ProjectDetail>) =>
-            updateProject(id, payload),
+        mutationFn: ({
+            id,
+            payload,
+        }: {
+            id: number;
+            payload: UpdateProjectData;
+        }) => updateProject(id, payload),
 
         onError: () => {
             toast.error("Error updating project...");
         },
 
-        onSuccess: () => {
+        onSuccess: (data, variables) => {
+            const { id } = variables;
+
             toast.success("Project updated.");
 
             queryClient.invalidateQueries({
-                queryKey: ["projects", id],
+                queryKey: LIST_PROJECTS_QUERY_KEY(),
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: DETAILED_PROJECT_QUERY_KEY(id),
             });
         },
     });

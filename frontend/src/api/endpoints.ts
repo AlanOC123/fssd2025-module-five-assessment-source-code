@@ -12,5 +12,8 @@ export const ENDPOINTS = {
         BASE: "projects/",
         GET_BY_ID: (id: number) => `projects/${id}/`,
         TOGGLE_PIN: (id: number) => `projects/${id}/pin/`,
+    },
+    USERS: {
+        BASE: ''
     }
 };

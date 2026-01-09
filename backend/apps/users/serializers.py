@@ -14,38 +14,34 @@ else:
     UserWithProfile = User
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(source="user.email", read_only=True)
     class Meta:
         model = UserProfile
         fields = [
-            "first_name", 'last_name', "date_of_birth", 
-            "bio", "location", "role", 
-            "full_name"
+            "id", "email", "first_name", 
+            'last_name', "date_of_birth",
+            "full_name", 'avatar',
         ]
 
         read_only_fields = ["full_name"]
 
-class UserSerializer(serializers.ModelSerializer):
-    profile = UserProfileSerializer()
+    def update(self, instance, validated_data):
+        writeable_fields = ["first_name", "last_name", "date_of_birth", "avatar"]
 
+        print(validated_data)
+
+        for field in writeable_fields:
+            if field in validated_data:
+                setattr(instance, field, validated_data[field])
+        
+        instance.save()
+        return instance
+
+
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = [
-            "id", "email", "profile"
-        ]
-    
-    def update(self, instance: UserWithProfile, validated_data):
-        profile_data = validated_data.pop("profile")
-        profile: UserProfile = instance.profile
-
-        instance.email = validated_data.get('email', instance.email)
-        instance.save()
-
-        profile.first_name = profile_data.get('first_name', profile.first_name)
-        profile.last_name = profile_data.get('last_name', profile.last_name)
-        profile.date_of_birth = profile_data.get('date_of_birth', profile.date_of_birth)
-        profile.bio = profile_data.get('bio', profile.bio)
-        profile.location = profile_data.get('location', profile.location)
-        profile.save()
+        fields = ["id", "email"]
 
 class CustomRegisterSerializer(RegisterSerializer):
     username = None
@@ -54,24 +50,29 @@ class CustomRegisterSerializer(RegisterSerializer):
     date_of_birth = serializers.DateField(required=True)
 
     def get_cleaned_data(self) -> Dict[str, Any]:
+        writeable_fields = ["first_name", "last_name", "date_of_birth"]
         data = super().get_cleaned_data()
         val_data = cast(Dict[str, Any], self.validated_data)
-        data['first_name'] = val_data.get('first_name', '')
-        data['last_name'] = val_data.get('last_name', '')
-        data['date_of_birth'] = val_data.get('date_of_birth', '')
+
+        for field in writeable_fields:
+            data[field] = val_data.get(field, "")
+
         return data
     
     def save(self, request) -> Any:
+        writeable_fields = ["first_name", "last_name", "date_of_birth"]
         user: UserWithProfile = super().save(request)
+
         if user.username != user.email:
             user.username = user.email
             user.save(update_fields=["username"])
 
         val_data = cast(Dict[str, Any], self.validated_data)
 
-        user.profile.first_name = val_data.get('first_name', '')
-        user.profile.last_name = val_data.get('last_name', '')
-        user.profile.date_of_birth = val_data.get('date_of_birth', '')
+        for field in writeable_fields:
+            value = val_data.get(field, "")
+            profile = user.profile
+            setattr(profile, field, value)
 
         user.profile.save()
         return user

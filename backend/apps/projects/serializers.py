@@ -49,6 +49,7 @@ class ProjectListSerializer(serializers.ModelSerializer):
 class ProjectDetailSerializer(serializers.ModelSerializer):
     owner = ProjectUserSerializer(source="owner.profile", read_only=True)
     members = ProjectMembershipSerializer(source="memberships", read_only=True, many=True)
+    is_pinned = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Project
@@ -62,7 +63,8 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             "created_at",
             "start_date",
             "end_date",
-            "updated_at"
+            "updated_at",
+            "is_pinned"
         ]
 
         read_only_fields = ["owner", "created_at", "updated_at"]

@@ -8,10 +8,7 @@ class UserProfile(models.Model):
     last_name = models.CharField(verbose_name="Last Name", max_length=40, null=True, blank=True)
     date_of_birth = models.DateField(verbose_name="Date of Birth", null=True, blank=True)
     user = models.OneToOneField(to=User, verbose_name="User", related_name="profile", on_delete=models.CASCADE)
-    bio = models.TextField(max_length=500, null=True, blank=True)
-    location = models.CharField(max_length=100, null=True, blank=True)
-    role = models.CharField(max_length=50, default="Member")
-    profile = models.ImageField
+    avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
 
     @property
     def full_name(self) -> str:
@@ -26,4 +23,4 @@ def create_user_profile(sender, instance: User, created, **kwargs):
         if not instance.username:
             instance.username = instance.email
             instance.save()
-        UserProfile.objects.create(user=instance)
+        UserProfile.objects.get_or_create(user=instance)

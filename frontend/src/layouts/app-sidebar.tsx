@@ -3,13 +3,14 @@ import {
     SidebarContent,
     SidebarGroup,
     SidebarHeader,
-    Spinner
+    Spinner,
 } from "@/components";
 import { ProfileCard, useGetActiveUserProfile } from "@/features";
-import { getActiveUserProfile } from "@/features";
+import { PinnedProjectsNav } from "@/features";
 
 export function AppSidebar() {
-    const { data: user, isLoading} = useGetActiveUserProfile();
+    const { data: user, isLoading } = useGetActiveUserProfile();
+    console.log(user)
 
     return (
         <Sidebar className="[grid-area:sidebar]">
@@ -17,12 +18,15 @@ export function AppSidebar() {
             <SidebarContent>
                 <SidebarGroup>
                     {isLoading ? (
-                        <div className="w-full h-full flex items-center justify-center">
+                        <div className="flex items-center justify-center w-full, h-full">
                             <Spinner />
                         </div>
                     ) : (
                         <ProfileCard user={user} />
                     )}
+                </SidebarGroup>
+                <SidebarGroup>
+                    <PinnedProjectsNav />
                 </SidebarGroup>
             </SidebarContent>
         </Sidebar>

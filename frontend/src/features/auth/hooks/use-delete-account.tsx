@@ -1,4 +1,4 @@
-import type { DeleteAccountData } from "../types";
+import type { DeleteAccountMutationProps } from "../types";
 import { USER_QUERY_KEY } from "./keys";
 
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -8,7 +8,7 @@ export function useDeleteAccount() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (credentials: DeleteAccountData) => deleteAccount(credentials),
+        mutationFn: ({ data }: DeleteAccountMutationProps) => deleteAccount(data),
         onSuccess: () => {
             queryClient.setQueryData(USER_QUERY_KEY, null)
         }

@@ -1,5 +1,6 @@
-const ROOT_DOMAIN = "projects";
-
-export const LIST_PROJECTS_ROUTE = ROOT_DOMAIN;
-export const DETAILED_PROJECT_ROUTE = (id: number) => `${ROOT_DOMAIN}/${id}/`;
-export const PIN_PROJECT_ROUTE = (id: number) => `${ROOT_DOMAIN}/${id}/pin/`
+export const PROJECT_ENDPOINTS = {
+    root: "projects",
+    list: () => `${PROJECT_ENDPOINTS.root}/`,
+    detailed: (id: number) => `${PROJECT_ENDPOINTS.root}/${id}/`,
+    pin: (id: number) => `${PROJECT_ENDPOINTS.root}/${id}/pin/`,
+};

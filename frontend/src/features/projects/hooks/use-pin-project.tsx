@@ -1,15 +1,15 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { pinProject } from "../services";
-import { PINNED_PROJECTS_QUERY_KEY } from "./keys";
+import { PROJECTS_KEYS } from "./keys";
 
-export function usePinProject(id: number) {
+export function usePinProject() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => pinProject(id),
+        mutationFn: (id: number) => pinProject(id),
 
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: PINNED_PROJECTS_QUERY_KEY,
+                queryKey: PROJECTS_KEYS.lists(),
             });
         },
     });

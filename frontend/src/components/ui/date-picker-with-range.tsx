@@ -15,10 +15,12 @@ import { Calendar1 } from "lucide-react";
 
 export function DatePickerWithRange({
     className,
+    calendarClassName,
     date,
     setDate,
 }: {
     className?: string;
+    calendarClassName?: string;
     date: DateRange | undefined;
     setDate: (date: DateRange | undefined) => void;
 }) {
@@ -49,7 +51,7 @@ export function DatePickerWithRange({
                         )}
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="p-0 flex items-center justify-center" align="start">
+                <PopoverContent className={cn(calendarClassName)} align="start">
                     <Calendar
                         mode="range"
                         defaultMonth={date?.from}       

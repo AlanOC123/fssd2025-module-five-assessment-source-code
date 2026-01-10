@@ -33,6 +33,8 @@ export function UpdateActiveUserForm() {
     });
 
     useEffect(() => {
+        if(!user) return;
+
         methods.reset({
             first_name: user.first_name,
             last_name: user.last_name,

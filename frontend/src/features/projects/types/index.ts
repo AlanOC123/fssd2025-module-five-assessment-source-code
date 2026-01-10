@@ -1,6 +1,8 @@
-import * as z from 'zod'
-import { createProjectSchema, updateProjectSchema } from '../forms';
+import * as z from "zod";
+import { createProjectSchema, updateProjectSchema } from "../forms";
 import { type UserProfile } from "@/features/users";
+import type { UseFormReturn } from "react-hook-form";
+import type { DateRange } from "react-day-picker";
 
 export type ProjectStatus = "pending" | "active" | "complete" | "archived";
 export type AccessLevel = "viewer" | "editor" | "admin";
@@ -9,23 +11,15 @@ export type MembershipStatus = "pending" | "active" | "rejected";
 export interface ProjectListItem {
     id: number;
     title: string;
-    status: ProjectStatus,
-    owner: UserProfile,
+    status: ProjectStatus;
+    owner: UserProfile;
     updated_at: string;
     is_pinned: boolean;
 }
 
-export interface ProjectMember {
-    id: number;
-    user: UserProfile;
-    access_level: AccessLevel;
-    status: MembershipStatus;
-    date_sent: string;
-}
-
 export interface ProjectDetailItem extends ProjectListItem {
     description: string | null;
-    members: ProjectMember[];
+    members: UserProfile[];
     created_at: string;
     start_date: string | null;
     end_date: string | null;
@@ -37,8 +31,31 @@ export interface PinnedProject {
 }
 
 export type ProjectQueryParam = {
-    query: string | null
+    query: string | null;
+};
+
+export type CreateProjectData = z.infer<typeof createProjectSchema>;
+export type UpdateProjectData = z.infer<typeof updateProjectSchema>;
+
+export interface CreateProjectViewProps {
+    methods: UseFormReturn<CreateProjectData>;
+    open: boolean;
+    onOpenChange: () => void;
+    onSubmit: (data: CreateProjectData) => Promise<void>;
+    dateRange: DateRange | undefined;
+    setDateRange: (curr: DateRange | undefined) => void;
+    closeForm: () => void;
+    isPending: boolean;
 }
 
-export type CreateProjectData = z.infer<typeof createProjectSchema>
-export type UpdateProjectData = z.infer<typeof updateProjectSchema>
+export interface ProjectListParamsProps {
+    search?: string;
+    is_pinned?: boolean;
+}
+
+export interface SearchProjectsProps {
+    currQuery: string;
+    setCurrQuery: (curr: string) => void;
+    results: ProjectListItem[];
+    isFetching: boolean;
+}

@@ -78,19 +78,21 @@ export function DateOfBirthInputGroup() {
         watch,
     } = useFormContext();
 
-    const value = watch("dateOfBirth");
+    const name = "date_of_birth";
+
+    const value = watch(name);
 
     const showSuccessIcon =
-        !errors["dateOfBirth"] && value && typeof value === "string";
-    const showError = errors["dateOfBirth"] && touchedFields["dateOfBirth"];
+        !errors[name] && value && typeof value === "string";
+    const showError = errors[name] && touchedFields[name];
 
     return (
         <FieldGroup>
-            <FieldLabel htmlFor={`dateOfBirth`}>Date of Birth</FieldLabel>
+            <FieldLabel htmlFor={name}>Date of Birth</FieldLabel>
             <InputGroup>
                 <InputGroupInput
                     type="date"
-                    id={`dateOfBirth`}
+                    id={name}
                     className={cn(
                         showSuccessIcon
                             ? "text-success"
@@ -100,7 +102,7 @@ export function DateOfBirthInputGroup() {
                     )}
                     data-valid={showSuccessIcon}
                     aria-invalid={showError}
-                    {...register("dateOfBirth")}
+                    {...register(name)}
                 />
                 {showSuccessIcon && (
                     <InputGroupAddon>
@@ -110,7 +112,7 @@ export function DateOfBirthInputGroup() {
             </InputGroup>
             {showError && (
                 <p className="text-destructive text-sm">
-                    {errors["dateOfBirth"]?.message as string}
+                    {errors[name]?.message as string}
                 </p>
             )}
         </FieldGroup>

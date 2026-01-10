@@ -23,6 +23,7 @@ export function UserAvatar({
     firstName = "",
     lastName = "",
 }: UserAvatarProps) {
+    console.log(src)
     return src ? (
         <Avatar>
             <AvatarImage src={src} />

@@ -94,7 +94,7 @@ export function DateInput({
     return (
         <Field>
             <FieldLabel>Start / End Dates (Optional)</FieldLabel>
-            <DatePickerWithRange date={date} setDate={setDate} />
+            <DatePickerWithRange calendarClassName="z-102 p-0 flex items-center justify-center" date={date} setDate={setDate} />
         </Field>
     );
 }
@@ -120,7 +120,7 @@ export function StatusInput() {
                 <SelectTrigger>
                     <SelectValue placeholder="Status" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="z-102">
                     <SelectItem value="pending">Pending</SelectItem>
                     <SelectItem value="active">Active</SelectItem>
                 </SelectContent>

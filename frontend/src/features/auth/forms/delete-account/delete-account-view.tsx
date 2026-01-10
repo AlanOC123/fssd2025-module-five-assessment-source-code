@@ -16,12 +16,12 @@ export function DeleteAccountView({
     methods,
     onSubmit,
     isPending,
-    setOpen,
+    setOpen
 }: DeleteAccountViewProps) {
     const { formState, register, handleSubmit } = methods;
 
     return (
-        <ModalBody>
+        <ModalBody className="max-w-md w-max min-w-xxs rounded-2xl">
             <ModalContent>
                 <h4 className="text-lg md:text-2xl text-neutral-600 dark:text-neutral-100 font-bold text-center mb-8">
                     Are you sure you want to delete your account?
@@ -45,11 +45,11 @@ export function DeleteAccountView({
                     >
                         {/* Challenge Field */}
                         <Field>
-                            <FieldLabel>
-                                To verify, type{" "}
+                            <FieldLabel className="flex flex-col gap-y-1 items-start">
+                                To verify, type
                                 <span className="font-mono font-bold select-all">
                                     "{DELETE_ACCOUNT_CHALLENGE}"
-                                </span>{" "}
+                                </span>
                                 below:
                             </FieldLabel>
                             <Input
@@ -64,7 +64,6 @@ export function DeleteAccountView({
                             )}
                         </Field>
 
-                        {/* Password Field */}
                         <Field>
                             <FieldLabel>Confirm Password</FieldLabel>
                             <Input
@@ -82,7 +81,7 @@ export function DeleteAccountView({
                 </div>
             </ModalContent>
 
-            <ModalFooter className="gap-4">
+            <ModalFooter className="gap-4 flex flex-wrap">
                 <Button variant="outline" onClick={() => setOpen(false)}>
                     Cancel
                 </Button>

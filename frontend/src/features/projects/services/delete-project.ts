@@ -1,9 +1,9 @@
 import { client } from "@/api";
-import { DETAILED_PROJECT_ROUTE } from "./endpoints";
+import { PROJECT_ENDPOINTS } from "./endpoints";
 
-export async function deleteProject(id: number) {
+export async function deleteProject(id: number): Promise<void> {
     try {
-        const response = await client.delete(DETAILED_PROJECT_ROUTE(id));
+        const response = await client.delete<void>(PROJECT_ENDPOINTS.detailed(id));
         return response.data;
     } catch (err) {
         console.error(err);

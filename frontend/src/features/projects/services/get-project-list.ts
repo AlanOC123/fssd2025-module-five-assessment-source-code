@@ -1,11 +1,10 @@
 import { client } from "@/api";
-import { LIST_PROJECTS_ROUTE } from "./endpoints";
+import { PROJECT_ENDPOINTS } from "./endpoints";
+import type { ProjectListItem, ProjectListParamsProps } from "../types";
 
-export async function getProjectList(searchQuery?: string) {
-    const params = searchQuery ? { search: searchQuery } : undefined;
-
+export async function getProjectList(params: ProjectListParamsProps): Promise<ProjectListItem[]> {
     try {
-        const response = await client.get(LIST_PROJECTS_ROUTE, { params });
+        const response = await client.get<ProjectListItem[]>(PROJECT_ENDPOINTS.list(), { params });
         return response.data;
     } catch (err) {
         console.error(err);

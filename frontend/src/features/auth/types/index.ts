@@ -9,6 +9,7 @@ import {
     registerUserSchema,
     requestPasswordResetSchema,
     confirmPasswordResetSchema,
+    changePasswordSchema,
 } from "../forms";
 
 import type { UseFormReturn } from "react-hook-form";
@@ -27,6 +28,8 @@ export type UpdatePasswordData = z.infer<typeof updatePasswordSchema>;
 export type DeleteAccountData = z.infer<typeof deleteAccountSchema>;
 export type LoginUserData = z.infer<typeof loginUserSchema>;
 export type RegisterUserData = z.infer<typeof registerUserSchema>;
+export type ChangePasswordData = z.infer<typeof changePasswordSchema>;
+
 export type RequestPasswordResetData = z.infer<
     typeof requestPasswordResetSchema
 >;
@@ -91,6 +94,12 @@ export interface ConfirmPasswordResetViewProps {
     handleSubmit: (data: ConfirmPasswordResetData) => void;
 }
 
+export interface ChangePasswordViewProps {
+    methods: UseFormReturn<ChangePasswordData>;
+    onSubmit: (data: ChangePasswordData) => void;
+    isPending: boolean
+}
+
 export interface TabContentContainerProps {
     value: RegisterStep;
     children: ReactNode;
@@ -101,4 +110,32 @@ export interface RegisterStepProps {
     onPrev?: () => void;
     onSubmit?: () => void;
     isLoading?: boolean;
+}
+
+export interface LoginMutationProps {
+    data: LoginUserData
+}
+
+export interface RegisterMutationProps {
+    data: RegisterUserData
+}
+
+export interface RequestPasswordResetMutationProps {
+    data: RequestPasswordResetData
+}
+
+export interface ConfirmPasswordResetMutationProps {
+    data: ConfirmPasswordResetPayload
+}
+
+export interface DeleteAccountMutationProps {
+    data: DeleteAccountData
+}
+
+export interface ChangePasswordMutationProps {
+    data: ChangePasswordData
+}
+
+export interface LogoutMutationProps {
+    data: void
 }

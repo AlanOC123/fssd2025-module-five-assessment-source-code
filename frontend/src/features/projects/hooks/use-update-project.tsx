@@ -2,7 +2,7 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { updateProject } from "../services";
 import { toast } from "sonner";
 import { type UpdateProjectData } from "../types";
-import { DETAILED_PROJECT_QUERY_KEY, LIST_PROJECTS_QUERY_KEY } from "./keys";
+import { PROJECTS_KEYS } from "./keys";
 
 export function useUpdateProject() {
     const queryClient = useQueryClient();
@@ -26,11 +26,11 @@ export function useUpdateProject() {
             toast.success("Project updated.");
 
             queryClient.invalidateQueries({
-                queryKey: LIST_PROJECTS_QUERY_KEY(),
+                queryKey: PROJECTS_KEYS.lists(),
             });
 
             queryClient.invalidateQueries({
-                queryKey: DETAILED_PROJECT_QUERY_KEY(id),
+                queryKey: PROJECTS_KEYS.detailed(id),
             });
         },
     });

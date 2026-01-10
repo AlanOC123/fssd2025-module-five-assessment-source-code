@@ -1,9 +1,9 @@
 import { client } from "@/api";
-import { ACTIVE_USER } from "./endpoints";
+import { ACTIVE_USER_ROUTE } from "./endpoints";
 
 export async function activeUser() {
     try {
-        const response = await client.get(ACTIVE_USER);
+        const response = await client.get(ACTIVE_USER_ROUTE);
         return response.data
     } catch (err) {
         console.error(err);

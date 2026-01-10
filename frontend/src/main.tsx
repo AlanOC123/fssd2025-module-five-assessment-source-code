@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router";
+import { RouterProvider } from "react-router";
+import { router } from "./router.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import '@fontsource/inter/100.css';
@@ -23,8 +24,6 @@ import '@fontsource/inter/900.css';
 import "@fontsource/inter/900-italic.css";
 
 import "./index.css";
-import App from "./App.tsx";
-import { AuthProvider } from "./features";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -38,11 +37,7 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-                <AuthProvider>
-                    <App />
-                </AuthProvider>
-            </BrowserRouter>
+            <RouterProvider router={router} />
         </QueryClientProvider>
     </StrictMode>
 );

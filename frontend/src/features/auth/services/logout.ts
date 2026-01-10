@@ -1,9 +1,9 @@
 import { client } from "@/api";
-import { LOGOUT } from "./endpoints";
+import { LOGOUT_ROUTE } from "./endpoints";
 
 export const logout = async () => {
     try {
-        const response = await client.post(LOGOUT, {});
+        const response = await client.post(LOGOUT_ROUTE, {});
         return response.data;
     } catch (err) {
         console.log(err);

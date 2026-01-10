@@ -16,6 +16,7 @@ export function ConfirmPasswordResetView({
     methods,
     handleSubmit,
 }: ConfirmPasswordResetViewProps) {
+
     return (
         <FormProvider {...methods}>
             <form
@@ -28,18 +29,18 @@ export function ConfirmPasswordResetView({
                         Create a strong new password and confirm it below.
                     </FieldDescription>
                     <PasswordInputGroup
-                        name="password"
+                        name="password1"
                         label="New Password"
                         placeholder="Create A Strong New Password"
                     />
                     <PasswordInputGroup
-                        name="confirmPassword"
+                        name="password2"
                         label="Confirm New Password"
                         placeholder="Type Password Again To Confirm"
                     />
                 </FieldSet>
                 <Field className="flex-row justify-center items-center gap-2">
-                    <Button className="flex-1" variant={"default"}>
+                    <Button type="submit" className="flex-1" variant={"default"}>
                         Submit
                     </Button>
                     <Link to={"/auth/login"}>

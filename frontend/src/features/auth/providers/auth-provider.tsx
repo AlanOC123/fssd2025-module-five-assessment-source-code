@@ -38,20 +38,13 @@ export const AuthProvider = ({ children }: BaseLayoutProps) => {
 
     const clearSession = () => {
         queryClient.setQueryData(USER_QUERY_KEY, null);
+        queryClient.cancelQueries();
         queryClient.clear();
-
-        const sessionKeys = ["access", "refresh", "csrf"];
-
-        sessionKeys.forEach((key) => {
-            sessionStorage.removeItem(key);
-            localStorage.removeItem(key);
-        });
-
         navigate("auth/login");
     };
 
     const handleLogin = (data: LoginUserData) => {
-        loginMutation.mutate(data, {
+        loginMutation.mutate({ data }, {
             onSuccess: () => {
                 toast.success("Logged in successfully...");
                 navigate("/");
@@ -63,7 +56,7 @@ export const AuthProvider = ({ children }: BaseLayoutProps) => {
     };
 
     const handleRegister = (data: RegisterUserData) => {
-        registerMutation.mutate(data, {
+        registerMutation.mutate({ data }, {
             onSuccess: () => {
                 toast.success("Registration successful! Please log in.");
                 navigate("/auth/login");
@@ -74,8 +67,8 @@ export const AuthProvider = ({ children }: BaseLayoutProps) => {
         });
     };
 
-    const handleLogout = (data: void) => {
-        logoutMutation.mutate(data, {
+    const handleLogout = () => {
+        logoutMutation.mutate(undefined, {
             onSuccess: () => {
                 clearSession();
                 toast.info("Logged out");
@@ -85,7 +78,7 @@ export const AuthProvider = ({ children }: BaseLayoutProps) => {
     };
 
     const handleDelete = async (data: DeleteAccountData) => {
-        return deleteMutation.mutateAsync(data, {
+        return deleteMutation.mutateAsync({ data }, {
             onSuccess: () => {
                 clearSession();
                 toast.info("Account deleted");
@@ -94,7 +87,7 @@ export const AuthProvider = ({ children }: BaseLayoutProps) => {
     };
 
     const handleResetRequest = async (data: RequestPasswordResetData) => {
-        return requestResetMutation.mutateAsync(data, {
+        return requestResetMutation.mutateAsync({ data }, {
             onSuccess: () => {
                 toast.success("Check your email for a reset link")
             }
@@ -102,10 +95,14 @@ export const AuthProvider = ({ children }: BaseLayoutProps) => {
     }
 
     const handleConfirmReset = async (data: ConfirmPasswordResetPayload) => {
-        return confirmResetMutation.mutateAsync(data, {
+        return confirmResetMutation.mutateAsync({ data }, {
             onSuccess: () => {
                 toast.success("Password updated successfully! Please login.")
                 setTimeout(() => navigate("/auth/login"), 3000)
+            },
+
+            onError: () => {
+                toast.error("Failed to reset password. Try again.");
             }
         })
     }

@@ -3,3 +3,7 @@ export * from './create-project-inputs';
 export * from './create-project-form-header';
 export * from './create-project-button';
 export * from './search-project-modal';
+export * from './project-list';
+export * from './pinned-projects-nav';
+export * from './project-detail-header';
+export * from './project-members-list';

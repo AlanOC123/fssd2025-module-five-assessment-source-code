@@ -47,12 +47,12 @@ function PersonalFieldSet({ onNext }: RegisterStepProps) {
                 </div>
                 <div className="flex flex-col gap-4">
                     <NameInputGroup
-                        name={"firstName"}
+                        name={"first_name"}
                         label="First Name"
                         placeholder="Type First Name"
                     />
                     <NameInputGroup
-                        name={"lastName"}
+                        name={"last_name"}
                         label="Last Name"
                         placeholder="Type Last Name"
                     />
@@ -60,8 +60,7 @@ function PersonalFieldSet({ onNext }: RegisterStepProps) {
                 </div>
             </div>
             <Field className="flex-row justify-between items-center w-full">
-                <Link to={"/auth/login"}>
-                    {" "}
+                <Link to={"/auth/login"} className="w-max flex-0">
                     <Button
                         className="max-w-fit inline-flex items-center"
                         variant={"secondary"}
@@ -72,7 +71,7 @@ function PersonalFieldSet({ onNext }: RegisterStepProps) {
                 </Link>
 
                 <Button
-                    className="max-w-fit inline-flex items-center"
+                    className="inline-flex items-center flex-1"
                     onClick={onNext}
                 >
                     <span>Next Step</span>
@@ -100,7 +99,7 @@ function AccountFieldSet({ onNext, onPrev }: RegisterStepProps) {
                         placeholder="name@example.com"
                     />
                     <EmailInputGroup
-                        name="confirmEmail"
+                        name="confirm_email"
                         label="Confirm Email"
                         placeholder="Type Email Again"
                     />
@@ -117,7 +116,7 @@ function AccountFieldSet({ onNext, onPrev }: RegisterStepProps) {
                 </Button>
 
                 <Button
-                    className="max-w-fit inline-flex items-center"
+                    className="inline-flex items-center flex-1"
                     onClick={onNext}
                 >
                     <span>Next Step</span>
@@ -140,12 +139,12 @@ function SecurityFieldSet({ onPrev, isLoading }: RegisterStepProps) {
                 </div>
                 <div className="flex flex-col gap-4">
                     <PasswordInputGroup
-                        name="password"
+                        name="password1"
                         label="Password"
                         placeholder="Create a Strong Password"
                     />
                     <PasswordInputGroup
-                        name="confirmPassword"
+                        name="password2"
                         label="Confirm Password"
                         placeholder="Type Password Again"
                     />

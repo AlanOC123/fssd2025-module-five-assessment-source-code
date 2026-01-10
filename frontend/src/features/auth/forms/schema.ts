@@ -53,19 +53,6 @@ export const updateEmailSchema = z
         path: ["confirm_email"],
     });
 
-export const updatePasswordSchema = z
-    .object({
-        current_password: z.string().min(1, "Current password is required"),
-        new_password: z
-            .string()
-            .min(8, "Password must be at least 8 characters"),
-        confirm_password: z.string(),
-    })
-    .refine((data) => data.new_password === data.confirm_password, {
-        message: "Passwords do not match",
-        path: ["confirm_password"],
-    });
-
 export const deleteAccountSchema = z
     .object({
         password: z.string().min(1, "Password is required"),
@@ -74,4 +61,15 @@ export const deleteAccountSchema = z
     .refine((data) => data.challenge === DELETE_ACCOUNT_CHALLENGE, {
         message: "You must type the confirmation phrase exactly.",
         path: ["challenge"],
+    });
+
+export const changePasswordSchema = z
+    .object({
+        old_password: z.string().min(1, "Current password required"),
+        new_password1: z.string().min(8, "Create a strong password. 8+ characters"),
+        new_password2: z.string(),
+    })
+    .refine((data) => data.new_password1 === data.new_password2, {
+        error: "Passwords do not match",
+        path: ["new_password2"]
     });

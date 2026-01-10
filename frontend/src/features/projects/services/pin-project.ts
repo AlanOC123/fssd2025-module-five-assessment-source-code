@@ -1,9 +1,9 @@
 import { client } from "@/api";
-import { PIN_PROJECT_ROUTE } from "./endpoints";
+import { PROJECT_ENDPOINTS } from "./endpoints";
 
-export async function pinProject(id: number) {
+export async function pinProject(id: number): Promise<void> {
     try {
-        const response = await client.get(PIN_PROJECT_ROUTE(id));
+        const response = await client.post<void>(PROJECT_ENDPOINTS.pin(id));
         return response.data;
     } catch (err) {
         console.error(err);

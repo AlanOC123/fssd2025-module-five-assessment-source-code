@@ -4,3 +4,4 @@ export * from './logout';
 export * from './register';
 export * from './active-user';
 export * from './reset-password';
+export * from './change-password';

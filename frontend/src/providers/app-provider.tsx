@@ -19,12 +19,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const openSidebar = () => setIsSidebarOpen(true);
     const openDock = () => setIsDockOpen(true);
     const openSearch = () => setIsSearchOpen(true);
-    const closeCreateProject = () => setIsCreateProjectOpen(true);
+    const openCreateProject = () => setIsCreateProjectOpen(true);
 
     const closeSidebar = () => setIsSidebarOpen(false);
     const closeDock = () => setIsDockOpen(false);
     const closeSearch = () => setIsSearchOpen(false);
-    const openCreateProject = () => setIsCreateProjectOpen(false);
+    const closeCreateProject = () => setIsCreateProjectOpen(false);
 
     return (
         <AppContext.Provider

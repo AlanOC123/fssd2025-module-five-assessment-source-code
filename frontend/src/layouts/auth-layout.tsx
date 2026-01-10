@@ -9,7 +9,7 @@ import { type BaseLayoutProps } from "@/types";
 import { cn } from "@/lib";
 import { Outlet } from "react-router";
 
-function AuthLayout({
+export function AuthLayout({
     className,
     ...props
 }: BaseLayoutProps) {
@@ -27,5 +27,3 @@ function AuthLayout({
         </PublicOnlyRoute>
     );
 }
-
-export { AuthLayout }

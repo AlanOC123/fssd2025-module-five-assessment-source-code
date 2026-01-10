@@ -9,6 +9,8 @@ export interface UserProfile {
     date_of_birth: string;
     full_name: string;
     avatar: string | null;
+    email: string;
+    user_id: number;
 }
 
 export type UpdateActiveUserProfileData = z.infer<typeof updateActiveUserProfileSchema>;

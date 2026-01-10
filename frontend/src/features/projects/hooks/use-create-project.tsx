@@ -2,7 +2,7 @@ import { createProject } from "../services";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { type CreateProjectData } from "../types";
 import { toast } from "sonner";
-import { LIST_PROJECTS_QUERY_KEY } from './keys';
+import { PROJECTS_KEYS } from './keys';
 
 export function useCreateProject() {
     const queryClient = useQueryClient();
@@ -14,7 +14,7 @@ export function useCreateProject() {
 
         onSuccess: () => {
             toast.success("Project created!");
-            queryClient.invalidateQueries({ queryKey: LIST_PROJECTS_QUERY_KEY() });
+            queryClient.invalidateQueries({ queryKey: PROJECTS_KEYS.lists() });
         },
     });
 }

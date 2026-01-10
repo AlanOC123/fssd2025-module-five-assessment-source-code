@@ -1,11 +1,11 @@
 import { type UpdateProjectData } from "../types";
 
 import { client } from "@/api";
-import { DETAILED_PROJECT_ROUTE } from "./endpoints";
+import { PROJECT_ENDPOINTS } from "./endpoints";
 
-export async function updateProject(id: number, payload: UpdateProjectData) {
+export async function updateProject(id: number, payload: UpdateProjectData): Promise<void> {
     try {
-        const response = await client.patch(DETAILED_PROJECT_ROUTE(id), payload);
+        const response = await client.patch<void>(PROJECT_ENDPOINTS.detailed(id), payload);
         return response.data;
     } catch (err) {
         console.error(err);

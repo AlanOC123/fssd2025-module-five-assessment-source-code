@@ -7,3 +7,4 @@ export * from './projects-page';
 export * from './settings-page';
 export * from './profile-page';
 export * from './inbox-page';
+export * from './project-detail-page';

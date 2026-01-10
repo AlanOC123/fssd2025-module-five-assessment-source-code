@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageSection, PageItem } from "@/components"; // Adjust imports based on your index.ts
-import { UpdateActiveUserForm } from "@/features";
+import { UpdateActiveUserForm, ChangePasswordForm, DeleteAccountForm } from "@/features";
 
 // We'll import the Account Tab later when we build it.
 // For now, you can either comment it out or create a temporary placeholder.
@@ -34,9 +34,10 @@ export function SettingsPage() {
                         </TabsContent>
 
                         {/* --- Tab 2: Account (Todo) --- */}
-                        <TabsContent value="account">
-
-                        </TabsContent>
+                        <TabsContent className="flex flex-col gap-y-4" value="account">
+                            <ChangePasswordForm />
+                            <DeleteAccountForm />
+                        </TabsContent>  
                     </Tabs>
                 </div>
             </PageItem>

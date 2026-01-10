@@ -1,7 +1,7 @@
 import { getProjectList } from "../services";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router";
-import { LIST_PROJECTS_QUERY_KEY } from "./keys";
+import { PROJECTS_KEYS } from "./keys";
 
 export function useGetProjectList(enableSearch: boolean = false) {
     const [searchParams] = useSearchParams();
@@ -11,7 +11,7 @@ export function useGetProjectList(enableSearch: boolean = false) {
     const query = search || undefined;
 
     return useQuery({
-        queryKey: LIST_PROJECTS_QUERY_KEY({ query }),
-        queryFn: () => getProjectList(query),
+        queryKey: PROJECTS_KEYS.list({ search: query }),
+        queryFn: () => getProjectList({ search: query }),
     });
 }

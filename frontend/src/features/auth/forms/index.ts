@@ -4,3 +4,4 @@ export * from "./delete-account";
 export * from "./login";
 export * from "./register";
 export * from "./request-password-reset";
+export * from './change-password';

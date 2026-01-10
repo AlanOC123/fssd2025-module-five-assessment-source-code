@@ -14,8 +14,6 @@ export function AppNav() {
         }
     });
 
-    console.log(isDockOpen)
-
     return (
         <nav
             className={cn(isDockOpen ? "h-auto" : "h-0",

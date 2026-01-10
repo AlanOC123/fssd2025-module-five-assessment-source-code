@@ -1,15 +1,21 @@
 from .models import Project, PinnedProject
 from .serializers import ProjectListSerializer, ProjectDetailSerializer, ProjectCreateSerializer
-from rest_framework import viewsets, permissions, filters
+from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.filters import SearchFilter, OrderingFilter
 from .permissions import IsProjectMember
 from django.db.models import Q, Exists, OuterRef
+from .filters import ProjectFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsProjectMember]
-    filter_backends = [filters.SearchFilter]
-    search_fields = ["title", "owner__email", "description", "status"]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = ProjectFilter
+
+    search_fields = ["title", "owner__email", "description"]
+    ordering_fields = ["updated_at", "created_at"]
 
     def get_serializer_class(self):
         if self.action == "retrieve":

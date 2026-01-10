@@ -4,6 +4,7 @@ from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework import status, generics, permissions
 from rest_framework.response import Response
 from .serializers import UserProfileSerializer
+from django.conf import settings
 
 
 class UserProfileDetailView(generics.RetrieveUpdateAPIView):
@@ -30,4 +31,16 @@ class CustomUserDetailsView(UserDetailsView):
         
         user.delete()
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        response = Response(status=status.HTTP_200_OK)
+
+        cookie_name = getattr(settings, "JWT_AUTH_COOKIE", "auth-token")
+        refresh_cookie_name = getattr(settings, "JWT_REFRESH_COOKIE", "refresh-token")
+
+        cookie_names = [cookie_name, refresh_cookie_name, "sessionid", "csrftoken"]
+
+        for cookie in cookie_names:
+            response.delete_cookie(cookie)
+
+        return response
+
+

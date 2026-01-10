@@ -14,13 +14,14 @@ else:
     UserWithProfile = User
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source="user.pk", read_only=True)
     email = serializers.CharField(source="user.email", read_only=True)
     class Meta:
         model = UserProfile
         fields = [
             "id", "email", "first_name", 
             'last_name', "date_of_birth",
-            "full_name", 'avatar',
+            "full_name", 'avatar', 'user_id'
         ]
 
         read_only_fields = ["full_name"]

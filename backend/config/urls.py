@@ -21,6 +21,7 @@ urlpatterns = [
     path('api/auth/password/reset/', PasswordResetView.as_view(), name="password_reset"),
     path('api/auth/password/reset/confirm/<uidb64>/<token>/', email_confirmation_redirect,  name="password_reset_confirm"),
     path('api/auth/password/reset/confirm/submit/', PasswordResetConfirmView.as_view(), name="password_reset_change"),
+    path('api/auth/password/change/', PasswordChangeView.as_view(), name="rest_password_change"),
 
     path("api/projects/", include("apps.projects.urls")),
     path("api/profiles/", include("apps.users.urls"))

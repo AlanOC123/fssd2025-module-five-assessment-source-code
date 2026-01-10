@@ -102,7 +102,7 @@ REST_AUTH = {
     'TOKEN_CREATOR': 'dj_rest_auth.utils.default_create_token',
 
     'PASSWORD_RESET_USE_SITES_DOMAIN': False,
-    'OLD_PASSWORD_FIELD_ENABLED': False,
+    'OLD_PASSWORD_FIELD_ENABLED': True,
     'LOGOUT_ON_PASSWORD_CHANGE': False,
     'SESSION_LOGIN': False,
     'USE_JWT': True,
@@ -117,6 +117,16 @@ REST_AUTH = {
     'JWT_AUTH_COOKIE_USE_CSRF': False,
     'JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED': False,
 }
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+    SECURE_SSL_REDIRECT = True
+
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE = True
+
+    REST_AUTH["JWT_AUTH_SECURE"] = True
 
 EMAIL_HOST="smtp.gmail.com"
 EMAIL_PORT=587

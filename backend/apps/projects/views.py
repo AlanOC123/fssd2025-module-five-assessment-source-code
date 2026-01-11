@@ -18,7 +18,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     ordering_fields = ["updated_at", "created_at"]
 
     def get_serializer_class(self):
-        if self.action == "retrieve":
+        if self.action in ["retrieve", "update", "partial_update"]:
             return ProjectDetailSerializer
         
         if self.action == "create":
@@ -44,6 +44,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+    
+    def perform_update(self, serializer):
+        print(serializer.validated_data)
+        return super().perform_update(serializer)
     
     @action(detail=True, methods=['post'])
     def pin(self, request, pk=None):

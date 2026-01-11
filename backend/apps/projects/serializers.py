@@ -62,11 +62,11 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             "is_pinned"
         ]
 
-        read_only_fields = ["owner", "created_at", "updated_at"]
+        read_only_fields = ["created_at", "updated_at"]
     
     def get_members(self, obj):
         active_memberships: List[ProjectMembership] = obj.memberships.filter(status="active").select_related("user__profile")
 
         profiles = [m.user.profile for m in active_memberships]
 
-        return UserProfileSerializer(profiles, many=True)
+        return UserProfileSerializer(profiles, many=True).data

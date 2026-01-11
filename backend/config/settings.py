@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Apps
     'apps.users',
     'apps.projects',
+    'apps.tasks',
 ]
 
 SITE_ID = 1

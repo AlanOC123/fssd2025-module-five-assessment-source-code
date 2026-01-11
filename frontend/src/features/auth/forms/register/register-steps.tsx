@@ -1,5 +1,6 @@
 import type { TabContentContainerProps, RegisterStepProps } from "../../types";
 import { Link } from "react-router";
+import { APP_PATHS } from "@/router";
 
 import {
     TabsContent,
@@ -60,7 +61,7 @@ function PersonalFieldSet({ onNext }: RegisterStepProps) {
                 </div>
             </div>
             <Field className="flex-row justify-between items-center w-full">
-                <Link to={"/auth/login"} className="w-max flex-0">
+                <Link to={APP_PATHS.auth.login} className="w-max flex-0">
                     <Button
                         className="max-w-fit inline-flex items-center"
                         variant={"secondary"}

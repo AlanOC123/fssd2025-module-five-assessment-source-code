@@ -1,2 +1,4 @@
-export const ALL_AUTH_QUERY_KEY = ['auth'] as const;
-export const USER_QUERY_KEY = [...ALL_AUTH_QUERY_KEY, 'user'] as const;
+export const AUTH_KEYS = {
+    all: () => ["auth"] as const,
+    user: () => [...AUTH_KEYS.all(), 'user'] as const
+};

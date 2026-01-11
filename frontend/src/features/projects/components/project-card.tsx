@@ -17,6 +17,7 @@ import { UserAvatar } from "@/features/users/components";
 
 import type { ProjectListItem, ProjectStatus } from "../types";
 import { usePinProject } from "../hooks";
+import { APP_PATHS } from "@/router";
 
 // Status Colors Helper
 const STATUS_COLORS: Record<ProjectStatus, string> = {
@@ -42,7 +43,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     console.log(project)
 
     return (
-        <Link to={`/projects/${project.id}`}>
+        <Link to={APP_PATHS.utils.projectDetails(project.id)}>
             <Card className="h-full hover:border-primary/50 transition-all cursor-pointer group flex flex-col relative overflow-hidden">
                 {/* Pinned Indicator (Corner banner style optional, or just button) */}
                 {project.is_pinned && (

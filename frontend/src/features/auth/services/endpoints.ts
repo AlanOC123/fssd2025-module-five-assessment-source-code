@@ -1,14 +1,26 @@
-const ROOT_DOMAIN = "auth"
+const AUTH_ROOT = "auth";
+const PASSWORD_ROOT = `${AUTH_ROOT}/password`;
 
-export const LOGIN_ROUTE = `/${ROOT_DOMAIN}/login/`;
-export const REGISTER_ROUTE = `/${ROOT_DOMAIN}/register/`;
-export const LOGOUT_ROUTE = `/${ROOT_DOMAIN}/logout/`;
-export const ACTIVE_USER_ROUTE = `/${ROOT_DOMAIN}/active_user/`;
-export const TOKEN_REFRESH_ROUTE = `/${ROOT_DOMAIN}/token/refresh/`;
+const PASSWORD_DOMAIN = {
+    root: PASSWORD_ROOT,
+    subdomains: {
+        reset: `${PASSWORD_ROOT}/reset`,
+        change: `${PASSWORD_ROOT}/change`,
+    },
+};
 
-const PASSWORD_SUBDOMAIN = `/${ROOT_DOMAIN}/password`;
-const PASSWORD_RESET_SUBDOMAIN = `${PASSWORD_SUBDOMAIN}/reset`
+const PASSWORD_ENDPOINTS = {
+    passwordResetRequest: `/${PASSWORD_DOMAIN.subdomains.reset}/`,
+    confirmPasswordReset: `/${PASSWORD_DOMAIN.subdomains.reset}/confirm/submit/`,
+    changePassword: `/${PASSWORD_DOMAIN.subdomains.change}/`,
+};
 
-export const PASSWORD_RESET_REQUEST_ROUTE = `${PASSWORD_RESET_SUBDOMAIN}`;
-export const PASSWORD_RESET_CONFIRM_ROUTE = `${PASSWORD_RESET_SUBDOMAIN}/confirm/submit/`;
-export const CHANGE_PASSWORD_ROUTE = `${PASSWORD_SUBDOMAIN}/change/`;
+export const AUTH_ENDPOINTS = {
+    root: `/${AUTH_ROOT}/`,
+    login: `/${AUTH_ROOT}/login/`,
+    register: `/${AUTH_ROOT}/register/`,
+    logout: `/${AUTH_ROOT}/logout/`,
+    activeUser: `/${AUTH_ROOT}/active_user/`,
+    tokenRefresh: `/${AUTH_ROOT}/token/refresh/`,
+    ...PASSWORD_ENDPOINTS
+} as const;

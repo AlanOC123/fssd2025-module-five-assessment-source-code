@@ -9,6 +9,7 @@ import {
 import { Link } from "react-router";
 import { EmailInputGroup } from "../../components";
 import type { RequestPasswordResetViewProps } from "../../types";
+import { APP_PATHS } from "@/router";
 
 export function RequestPasswordResetView({
     methods,
@@ -36,7 +37,7 @@ export function RequestPasswordResetView({
                     <Button className="flex-1" variant={"default"}>
                         Submit
                     </Button>
-                    <Link to={"/auth/login"}>
+                    <Link to={APP_PATHS.auth.login}>
                         <Button className="flex-1" variant={"destructive"}>
                             Cancel
                         </Button>

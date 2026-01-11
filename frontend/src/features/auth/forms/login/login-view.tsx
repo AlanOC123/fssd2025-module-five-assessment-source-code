@@ -4,6 +4,7 @@ import { EmailInputGroup, PasswordInputGroup } from "../../components";
 import { Link } from "react-router";
 import { LogIn, Signature } from "lucide-react";
 import type { LoginViewProps } from "../../types";
+import { APP_PATHS } from "@/router";
 
 export function LoginView({ methods, isPending, onSubmit }:LoginViewProps ) {
     return (
@@ -42,7 +43,7 @@ export function LoginView({ methods, isPending, onSubmit }:LoginViewProps ) {
                             <span>{isPending ? "Logging In..." : "Log In"}</span>
                             <LogIn />
                         </Button>
-                        <Link className="inline-flex" to={"/auth/register"}>
+                        <Link className="inline-flex" to={APP_PATHS.auth.register}>
                             <Button
                                 className="inline-flex flex-1 items-center"
                                 variant={"secondary"}
@@ -53,7 +54,7 @@ export function LoginView({ methods, isPending, onSubmit }:LoginViewProps ) {
                         </Link>
                         <Link
                             className="inline-flex items-center justify-center"
-                            to={"/auth/password/reset"}
+                            to={APP_PATHS.auth.passwordReset}
                         >
                             <Button
                                 variant={"link"}

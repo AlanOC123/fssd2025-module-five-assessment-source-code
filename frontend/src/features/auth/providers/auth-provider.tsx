@@ -11,7 +11,7 @@ import {
     useDeleteAccount,
     useRequestReset,
     useConfirmReset,
-    USER_QUERY_KEY,
+    AUTH_KEYS,
 } from "../hooks";
 
 import type { BaseLayoutProps } from "@/types";
@@ -22,6 +22,7 @@ import type {
     RegisterUserData,
     RequestPasswordResetData,
 } from "../types";
+import { APP_PATHS } from "@/router";
 
 export const AuthProvider = ({ children }: BaseLayoutProps) => {
     const queryClient = useQueryClient();
@@ -37,10 +38,10 @@ export const AuthProvider = ({ children }: BaseLayoutProps) => {
     const confirmResetMutation = useConfirmReset();
 
     const clearSession = () => {
-        queryClient.setQueryData(USER_QUERY_KEY, null);
+        queryClient.setQueryData(AUTH_KEYS.user(), null);
         queryClient.cancelQueries();
         queryClient.clear();
-        navigate("auth/login");
+        navigate(APP_PATHS.auth.login);
     };
 
     const handleLogin = (data: LoginUserData) => {

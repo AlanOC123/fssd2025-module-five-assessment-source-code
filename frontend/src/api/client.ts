@@ -1,6 +1,6 @@
 import { api } from "@/lib";
 import { type InternalAxiosRequestConfig } from "axios";
-import { ENDPOINTS } from "./endpoints";
+import { AUTH_ENDPOINTS } from "@/features";
 
 export { api as client };
 
@@ -65,7 +65,7 @@ api.interceptors.response.use(
 
         if (error.response?.status !== 401) { return Promise.reject(error) }
 
-        if (originalConfig.url?.includes(ENDPOINTS.AUTH.TOKEN_REFRESH)) {
+        if (originalConfig.url?.includes(AUTH_ENDPOINTS.tokenRefresh)) {
             return Promise.reject(error)
         }
 
@@ -73,7 +73,7 @@ api.interceptors.response.use(
             originalConfig._retry = true;
 
             try {
-                await api.post(ENDPOINTS.AUTH.TOKEN_REFRESH);
+                await api.post(AUTH_ENDPOINTS.tokenRefresh);
                 return api(originalConfig);
             } catch (error) {
                 return Promise.reject(error)

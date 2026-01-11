@@ -2,6 +2,7 @@ import { useAuth } from "@/features";
 import { type BaseLayoutProps } from "@/types";
 import { Navigate, useLocation } from "react-router";
 import { LoadingPage } from "../layout";
+import { APP_PATHS } from "@/router";
 
 export function PublicOnlyRoute({ children }: BaseLayoutProps) {
     const auth = useAuth()
@@ -16,7 +17,7 @@ export function PublicOnlyRoute({ children }: BaseLayoutProps) {
     }
 
     if (user) {
-        return <Navigate to={"/"} replace state={{ from: location }}/>
+        return <Navigate to={APP_PATHS.app.root} replace state={{ from: location }}/>
     }
 
     return <>{children}</>;

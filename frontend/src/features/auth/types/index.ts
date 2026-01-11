@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 
 import {
     updateEmailSchema,
-    updatePasswordSchema,
     deleteAccountSchema,
     loginUserSchema,
     registerUserSchema,
@@ -24,7 +23,6 @@ export type RegisterStep = "personal" | "account" | "security";
 export type SaveableKey = keyof StorageConfig["auth_items"];
 
 export type UpdateEmailData = z.infer<typeof updateEmailSchema>;
-export type UpdatePasswordData = z.infer<typeof updatePasswordSchema>;
 export type DeleteAccountData = z.infer<typeof deleteAccountSchema>;
 export type LoginUserData = z.infer<typeof loginUserSchema>;
 export type RegisterUserData = z.infer<typeof registerUserSchema>;
@@ -112,30 +110,29 @@ export interface RegisterStepProps {
     isLoading?: boolean;
 }
 
-export interface LoginMutationProps {
+export interface LoginRequest {
     data: LoginUserData
 }
 
-export interface RegisterMutationProps {
+export interface RegisterRequest {
     data: RegisterUserData
 }
 
-export interface RequestPasswordResetMutationProps {
+export interface RequestPasswordResetRequest {
     data: RequestPasswordResetData
 }
 
-export interface ConfirmPasswordResetMutationProps {
+export interface ConfirmPasswordResetRequest {
     data: ConfirmPasswordResetPayload
 }
 
-export interface DeleteAccountMutationProps {
+export interface DeleteAccountRequest {
     data: DeleteAccountData
 }
 
-export interface ChangePasswordMutationProps {
+export interface ChangePasswordRequest {
     data: ChangePasswordData
 }
-
-export interface LogoutMutationProps {
-    data: void
+export interface LoginResponse {
+    user: User;
 }

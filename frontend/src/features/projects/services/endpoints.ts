@@ -1,6 +1,8 @@
+const PROJECTS_ROOT = "projects"
+
 export const PROJECT_ENDPOINTS = {
-    root: "projects",
-    list: () => `${PROJECT_ENDPOINTS.root}/`,
-    detailed: (id: number) => `${PROJECT_ENDPOINTS.root}/${id}/`,
-    pin: (id: number) => `${PROJECT_ENDPOINTS.root}/${id}/pin/`,
+    root: `/${PROJECTS_ROOT}/`,
+    list: `${PROJECTS_ROOT}/`,
+    detailed: (id: number) => `/${PROJECTS_ROOT}/${id}/`,
+    pin: (id: number) => `/${PROJECTS_ROOT}/${id}/pin/`,
 };

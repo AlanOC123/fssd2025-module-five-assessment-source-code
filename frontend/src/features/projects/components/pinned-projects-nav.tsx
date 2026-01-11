@@ -3,6 +3,7 @@ import { FolderDot, Pin } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetPinnedProjects } from "../hooks";
+import { APP_PATHS } from "@/router";
 
 export function PinnedProjectsNav() {
     const { data: projects = [], isLoading } = useGetPinnedProjects();
@@ -41,7 +42,7 @@ export function PinnedProjectsNav() {
                     return (
                         <Link
                             key={project.id}
-                            to={`/projects/${project.id}`}
+                            to={APP_PATHS.utils.projectDetails(project.id)}
                             className={`
                                 group flex items-center rounded-md px-2 py-1.5 text-sm font-medium transition-colors 
                                 ${

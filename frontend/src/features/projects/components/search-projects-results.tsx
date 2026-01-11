@@ -10,6 +10,7 @@ import type { ProjectList } from "../types";
 import { SearchProjectCard } from "./search-project-card";
 import { useNavigate } from "react-router";
 import { useApp } from "@/hooks";
+import { APP_PATHS } from "@/router";
 
 export function SearchProjectResults({ results, isFetching }) {
     const { closeSearch } = useApp();
@@ -18,9 +19,9 @@ export function SearchProjectResults({ results, isFetching }) {
 
     const navigate = useNavigate();
 
-    const handleSelect = (projectId: string) => {
+    const handleSelect = (projectId: number) => {
         closeSearch();
-        navigate(`/projects/${projectId}`);
+        navigate(APP_PATHS.utils.projectDetails(projectId));
     };
 
     return (

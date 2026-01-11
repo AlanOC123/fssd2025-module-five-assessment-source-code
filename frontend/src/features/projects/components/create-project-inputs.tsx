@@ -1,4 +1,4 @@
-import { useFormContext } from "react-hook-form";
+import { useFormContext, Controller } from "react-hook-form";
 import { CheckCircle } from "lucide-react";
 
 import {
@@ -15,6 +15,7 @@ import {
     InputGroupAddon,
     InputGroupInput,
 } from "@/components";
+
 import type { DateRange } from "react-day-picker";
 
 export function TitleInput() {
@@ -94,7 +95,11 @@ export function DateInput({
     return (
         <Field>
             <FieldLabel>Start / End Dates (Optional)</FieldLabel>
-            <DatePickerWithRange calendarClassName="z-102 p-0 flex items-center justify-center" date={date} setDate={setDate} />
+            <DatePickerWithRange
+                calendarClassName="z-102 p-0 flex items-center justify-center"
+                date={date}
+                setDate={setDate}
+            />
         </Field>
     );
 }
@@ -103,38 +108,48 @@ export function StatusInput() {
     const name = "status";
 
     const {
-        register,
         formState: { errors, touchedFields },
         watch,
+        control,
     } = useFormContext();
 
-    const value = watch("dateOfBirth");
+    const value = watch(name);
 
     const showSuccessIcon = !errors[name] && value && typeof value === "string";
     const showError = errors[name] && touchedFields[name];
 
     return (
-        <Field>
-            <FieldLabel>Status</FieldLabel>
-            <Select {...register(name)}>
-                <SelectTrigger>
-                    <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent className="z-102">
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="active">Active</SelectItem>
-                </SelectContent>
-                {showSuccessIcon && (
-                    <InputGroupAddon>
-                        <CheckCircle className="text-success" />
-                    </InputGroupAddon>
-                )}
-            </Select>
-            {showError && (
-                <p className="text-error text-sm">
-                    {errors[name]?.message as string}
-                </p>
+        <Controller
+            control={control}
+            name={name}
+            render={({ field }) => (
+                <Field>
+                    <FieldLabel>Status</FieldLabel>
+                    <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        value={field.value}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Status" />
+                        </SelectTrigger>
+                        <SelectContent className="z-102">
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="active">Active</SelectItem>
+                        </SelectContent>
+                        {showSuccessIcon && (
+                            <InputGroupAddon>
+                                <CheckCircle className="text-success" />
+                            </InputGroupAddon>
+                        )}
+                    </Select>
+                    {showError && (
+                        <p className="text-error text-sm">
+                            {errors[name]?.message as string}
+                        </p>
+                    )}
+                </Field>
             )}
-        </Field>
+        ></Controller>
     );
 }

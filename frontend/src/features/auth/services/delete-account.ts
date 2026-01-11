@@ -1,13 +1,11 @@
-import type { DeleteAccountData } from "../types";
+import type { DeleteAccountRequest } from "../types";
 
 import { client } from "@/api";
-import { ACTIVE_USER_ROUTE } from "./endpoints";
+import { AUTH_ENDPOINTS } from "./endpoints";
 
-export async function deleteAccount(payload: DeleteAccountData) {
+export async function deleteAccount({ data }: DeleteAccountRequest): Promise<void> {
     try {
-        const response = await client.delete(ACTIVE_USER_ROUTE, {
-            data: payload,
-        });
+        const response = await client.delete<void>(AUTH_ENDPOINTS.activeUser, { data });
         return response.data;
     } catch (err) {
         console.error(err);

@@ -1,7 +1,7 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { updateProject } from "../services";
 import { toast } from "sonner";
-import { type UpdateProjectData } from "../types";
+import { type UpdateProjectRequest } from "../types";
 import { PROJECTS_KEYS } from "./keys";
 
 export function useUpdateProject() {
@@ -10,11 +10,8 @@ export function useUpdateProject() {
     return useMutation({
         mutationFn: ({
             id,
-            payload,
-        }: {
-            id: number;
-            payload: UpdateProjectData;
-        }) => updateProject(id, payload),
+            data,
+        }: UpdateProjectRequest) => updateProject({ id, data }),
 
         onError: () => {
             toast.error("Error updating project...");

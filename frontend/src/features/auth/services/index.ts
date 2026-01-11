@@ -5,3 +5,4 @@ export * from './register';
 export * from './active-user';
 export * from './reset-password';
 export * from './change-password';
+export * from './endpoints';

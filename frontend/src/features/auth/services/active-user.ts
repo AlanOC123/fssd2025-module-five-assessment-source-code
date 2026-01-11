@@ -1,9 +1,10 @@
 import { client } from "@/api";
-import { ACTIVE_USER_ROUTE } from "./endpoints";
+import { AUTH_ENDPOINTS } from "./endpoints";
+import type { User } from "../types";
 
-export async function activeUser() {
+export async function activeUser(): Promise<User> {
     try {
-        const response = await client.get(ACTIVE_USER_ROUTE);
+        const response = await client.get<User>(AUTH_ENDPOINTS.activeUser);
         return response.data
     } catch (err) {
         console.error(err);

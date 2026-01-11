@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { register } from "../services";
-import type { RegisterMutationProps } from "../types";
+import type { RegisterRequest } from "../types";
 
 export function useRegister() {
     return useMutation({
-        mutationFn: ({ data } : RegisterMutationProps) => register(data)
+        mutationFn: ({ data } : RegisterRequest) => register({ data })
     })
 }

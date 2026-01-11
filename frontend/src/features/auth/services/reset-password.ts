@@ -1,14 +1,14 @@
-import { PASSWORD_RESET_CONFIRM_ROUTE, PASSWORD_RESET_REQUEST_ROUTE } from "./endpoints";
-import type { ConfirmPasswordResetPayload, RequestPasswordResetData } from "../types";
+import { AUTH_ENDPOINTS } from "./endpoints";
+import type { ConfirmPasswordResetRequest, RequestPasswordResetRequest } from "../types";
 import { client } from "@/api";
 
 export const requestPasswordReset = async (
-    credentials: RequestPasswordResetData
-) => {
+    { data }: RequestPasswordResetRequest
+): Promise<void> => {
     try {
-        const response = await client.post(
-            PASSWORD_RESET_REQUEST_ROUTE,
-            credentials
+        const response = await client.post<void>(
+            AUTH_ENDPOINTS.passwordResetRequest,
+            { data }
         );
         return response.data;
     } catch (err) {
@@ -17,9 +17,9 @@ export const requestPasswordReset = async (
     }
 };
 
-export const confirmPasswordReset = async (credentials: ConfirmPasswordResetPayload) => {
+export const confirmPasswordReset = async ({ data }: ConfirmPasswordResetRequest): Promise<void> => {
     try {
-        const response = await client.post(PASSWORD_RESET_CONFIRM_ROUTE, credentials);
+        const response = await client.post<void>(AUTH_ENDPOINTS.confirmPasswordReset, data);
     return response.data;
     } catch(err) {
         console.log(err);

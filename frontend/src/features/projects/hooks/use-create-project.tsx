@@ -1,6 +1,6 @@
 import { createProject } from "../services";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { type CreateProjectData } from "../types";
+import type { CreateProjectRequest } from "../types";
 import { toast } from "sonner";
 import { PROJECTS_KEYS } from './keys';
 
@@ -8,7 +8,7 @@ export function useCreateProject() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (payload: CreateProjectData) => createProject(payload),
+        mutationFn: ({ data }: CreateProjectRequest) => createProject({ data }),
 
         onError: () => toast.error("Error creating project"),
 

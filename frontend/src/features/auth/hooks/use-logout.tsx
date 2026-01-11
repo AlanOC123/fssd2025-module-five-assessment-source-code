@@ -1,6 +1,6 @@
 import { logout } from "../services";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { USER_QUERY_KEY } from "./keys";
+import { AUTH_KEYS } from "./keys";
 
 export function useLogout() {
     const queryClient = useQueryClient()
@@ -9,7 +9,7 @@ export function useLogout() {
         mutationFn: () => logout(),
 
         onSuccess: () => {
-            queryClient.setQueryData(USER_QUERY_KEY, null);
+            queryClient.setQueryData(AUTH_KEYS.user(), null);
             queryClient.clear()
             sessionStorage.clear()
         }

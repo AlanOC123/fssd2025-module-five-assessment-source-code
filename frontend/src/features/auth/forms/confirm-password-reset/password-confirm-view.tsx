@@ -3,6 +3,8 @@ import type { ConfirmPasswordResetViewProps } from "../../types";
 import { FormProvider } from "react-hook-form";
 import { PasswordInputGroup } from "../../components";
 
+import { APP_PATHS } from "@/router";
+
 import { Link } from "react-router";
 import {
     Field,
@@ -43,7 +45,7 @@ export function ConfirmPasswordResetView({
                     <Button type="submit" className="flex-1" variant={"default"}>
                         Submit
                     </Button>
-                    <Link to={"/auth/login"}>
+                    <Link to={APP_PATHS.auth.login}>
                         <Button className="flex-1" variant={"destructive"}>
                             Cancel
                         </Button>

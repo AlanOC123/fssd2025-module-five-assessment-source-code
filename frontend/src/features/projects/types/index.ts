@@ -59,3 +59,29 @@ export interface SearchProjectsProps {
     results: ProjectListItem[];
     isFetching: boolean;
 }
+
+export interface CreateProjectRequest {
+    data: CreateProjectData;
+}
+
+export interface UpdateProjectRequest {
+    id: number;
+    data: UpdateProjectData;
+}
+
+export interface UpdateProjectFormProps {
+    open: boolean;
+    onOpenChange: (curr: boolean) => void,
+    project: ProjectDetailItem,
+}
+
+export interface UpdateProjectViewProps {
+    methods: UseFormReturn<UpdateProjectData>;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    isPending: boolean;
+    dateRange: DateRange | undefined;
+    setDateRange: (range: DateRange | undefined) => void;
+    closeForm: () => void;
+    onSubmit: (data: UpdateProjectData) => void;
+}

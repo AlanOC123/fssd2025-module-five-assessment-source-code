@@ -28,3 +28,4 @@ export * from "./dropdown-menu";
 export * from "./tooltip.tsx";
 export * from './badge.tsx';
 export * from './alert-dialog.tsx';
+export * from './dialog.tsx';

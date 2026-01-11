@@ -8,6 +8,7 @@ import { useAuth } from "../../hooks";
 import { ConfirmPasswordResetView } from "./password-confirm-view";
 import { confirmPasswordResetSchema } from "../schema";
 import { toast } from "sonner";
+import { APP_PATHS} from "@/router";
 
 export function ConfirmPasswordResetForm() {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ export function ConfirmPasswordResetForm() {
 
     useEffect(() => {
         if (!uid || !token) {
-            navigate("/auth/login");
+            navigate(APP_PATHS.auth.login);
         }
     }, [uid, token, navigate]);
 

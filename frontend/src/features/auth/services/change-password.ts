@@ -1,13 +1,18 @@
 import { client } from "@/api";
-import type { ChangePasswordData } from "../types";
-import { CHANGE_PASSWORD_ROUTE } from "./endpoints";
+import type { ChangePasswordRequest } from "../types";
+import { AUTH_ENDPOINTS } from "./endpoints";
 
-export async function changePassword(data: ChangePasswordData) {
+export async function changePassword({
+    data,
+}: ChangePasswordRequest): Promise<void> {
     try {
-        const response = await client.post(CHANGE_PASSWORD_ROUTE, data);
-        return response.data
+        const response = await client.post<void>(
+            AUTH_ENDPOINTS.changePassword,
+            data
+        );
+        return response.data;
     } catch (err) {
         console.error(err);
-        throw err
+        throw err;
     }
 }

@@ -1,39 +1,40 @@
 import { useNavigate, useParams } from "react-router";
-import { toast } from "sonner";
-import { Separator } from "@/components/ui/separator";
-import { Spinner } from "@/components/ui/spinner"; // Or your specific loading component
+import { Spinner, Separator } from "@/components"; // Or your specific loading component
 import { useGetProjectItem, useDeleteProject, ProjectDetailHeader, ProjectMembersList } from "@/features";
+import { APP_PATHS } from "@/router";
+import { UpdateProjectForm } from "@/features";
+import { useState } from "react";
 
 export function ProjectDetailsPage() {
     const { projectId } = useParams();
     const navigate = useNavigate();
+    const [isEditOpen, setIsEditOpen] = useState(false);
 
-    // 1. Safe ID Parsing
     const id = projectId ? parseInt(projectId, 10) : 0;
 
-    // 2. Data Fetching
     const { data: project, isLoading, isError } = useGetProjectItem(id);
     const { mutateAsync: deleteProject, isPending: isDeleting } =
         useDeleteProject();
 
-    // 3. Handlers
     const handleDelete = async () => {
         if (!id) return;
         try {
             await deleteProject(id);
-            // Navigation is usually handled in the mutation onSuccess,
-            // but we can force it here just in case.
-            navigate("/projects");
+            navigate(APP_PATHS.app.projects);
         } catch (error) {
-            // Error is handled by the hook's toast
             console.error("Failed to delete project", error);
         }
     };
 
     const handleEdit = () => {
-        // TODO: Open the "Update Project Modal" (We will build this next)
-        toast.info("Edit mode coming soon!");
+        if (!id) return;
+        console.log(project)
+        setIsEditOpen(true);
     };
+
+    const closeEdit = () => {
+        setIsEditOpen(false)
+    }
 
     // 4. Loading / Error States
     if (isLoading) {
@@ -64,7 +65,6 @@ export function ProjectDetailsPage() {
         );
     }
 
-    // 5. The Layout
     return (
         <div className="container max-w-7xl py-8 space-y-8 animate-in fade-in-50">
             {/* Header Section */}
@@ -76,6 +76,12 @@ export function ProjectDetailsPage() {
             />
 
             <Separator />
+            <UpdateProjectForm
+                open={isEditOpen}
+                onOpenChange={setIsEditOpen}
+                closeForm={closeEdit}
+                project={project}
+            />
 
             {/* Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

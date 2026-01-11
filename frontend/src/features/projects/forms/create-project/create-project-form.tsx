@@ -45,8 +45,8 @@ export function CreateProjectForm() {
         closeCreateProject();
     }
 
-    async function handleSubmit(payload: CreateProjectData) {
-        createProject(payload, {
+    async function handleSubmit(data: CreateProjectData) {
+        createProject({ data }, {
             onSuccess: () => {
                 closeForm();
             },

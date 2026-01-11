@@ -1,9 +1,9 @@
 import { client } from "@/api";
-import { ACTIVE_USER_ROUTE } from "./endpoints";
+import { USERS_ENDPOINTS } from "./endpoints";
 
 export async function getActiveUserProfile() {
     try {
-        const response = await client.get(ACTIVE_USER_ROUTE)
+        const response = await client.get(USERS_ENDPOINTS.root)
         return response.data
     } catch (err) {
         console.error(err)

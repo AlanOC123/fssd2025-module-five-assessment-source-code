@@ -1,3 +1,5 @@
-const ROOT_DOMAIN = "profiles"
+const USERS_ROOT = "profiles"
 
-export const ACTIVE_USER_ROUTE = `/${ROOT_DOMAIN}/active_user/`;
+export const USERS_ENDPOINTS = {
+    root: `/${USERS_ROOT}/`,
+};

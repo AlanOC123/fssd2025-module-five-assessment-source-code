@@ -21,3 +21,7 @@ export interface UpdateActiveUserViewProps {
     user: UserProfile;
     isPending: boolean;
 }
+
+export interface UpdateActiveUserRequest {
+    data: FormData
+}

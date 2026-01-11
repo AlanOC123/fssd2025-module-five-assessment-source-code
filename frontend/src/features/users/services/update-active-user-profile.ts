@@ -1,9 +1,10 @@
 import { client } from "@/api"
-import { ACTIVE_USER_ROUTE } from "./endpoints"
+import { USERS_ENDPOINTS } from "./endpoints"
+import type { UpdateActiveUserRequest, UserProfile } from "../types";
 
-export async function updateActiveUserProfile(data: FormData) {
+export async function updateActiveUserProfile({ data }: UpdateActiveUserRequest): Promise<UserProfile> {
     try {
-        const response = await client.patch(ACTIVE_USER_ROUTE, data);
+        const response = await client.patch<UserProfile>(USERS_ENDPOINTS.root, data);
         return response.data
     } catch (err) {
         console.error(err);

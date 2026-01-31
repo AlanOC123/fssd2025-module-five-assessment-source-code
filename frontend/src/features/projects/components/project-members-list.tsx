@@ -13,8 +13,6 @@ export function ProjectMembersList({
     members,
     owner,
 }: ProjectMembersListProps) {
-    // Combine owner and members, removing duplicates by ID just in case
-    // (Assuming owner might not be in the members list API response)
     const allMembers = [owner, ...members.filter((m) => m.user_id !== owner.user_id)];
 
     return (

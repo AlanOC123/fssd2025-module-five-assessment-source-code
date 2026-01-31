@@ -13,8 +13,15 @@ export function useUpdateProject() {
             data,
         }: UpdateProjectRequest) => updateProject({ id, data }),
 
-        onError: () => {
+        onError: (error, variables) => {
+            console.error(error);
             toast.error("Error updating project...");
+
+            const { id } = variables;
+
+            queryClient.invalidateQueries({
+                queryKey: PROJECTS_KEYS.detailed(id)
+            })
         },
 
         onSuccess: (data, variables) => {

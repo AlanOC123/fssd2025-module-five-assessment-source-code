@@ -7,3 +7,6 @@ export * from './project-list';
 export * from './pinned-projects-nav';
 export * from './project-detail-header';
 export * from './project-members-list';
+export * from './workspace-header';
+export * from './mobile-nav-item';
+export * from './project-timeline';

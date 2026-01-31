@@ -1,10 +1,5 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components";
-
-interface UserAvatarProps {
-    src?: string | null;
-    firstName?: string;
-    lastName?: string;
-}
+import type { UserAvatarProps } from "../types";
 
 function getUserInitials(
     firstName: string = "",
@@ -23,7 +18,6 @@ export function UserAvatar({
     firstName = "",
     lastName = "",
 }: UserAvatarProps) {
-    console.log(src)
     return src ? (
         <Avatar>
             <AvatarImage src={src} />

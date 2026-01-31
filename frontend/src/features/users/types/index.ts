@@ -4,6 +4,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { updateActiveUserProfileSchema } from "../forms";
 
 export interface UserProfile {
+    id: number;
     first_name: string;
     last_name: string;
     date_of_birth: string;
@@ -24,4 +25,10 @@ export interface UpdateActiveUserViewProps {
 
 export interface UpdateActiveUserRequest {
     data: FormData
+}
+
+export interface UserAvatarProps {
+    src?: string | null;
+    firstName?: string;
+    lastName?: string;
 }

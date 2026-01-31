@@ -1,61 +1,39 @@
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ProjectCard } from "./project-card";
 import type { ProjectListItem } from "../types";
+import { ProjectCard } from "./project-card"; // Assuming you have this
+import { Loader2, FolderOpen } from "lucide-react";
 
-interface ProjectsListProps {
-    projects: ProjectListItem[];
+interface ProjectListProps {
+    projects?: ProjectListItem[];
     isLoading: boolean;
-    onCreateClick: () => void;
 }
 
-export function ProjectsList({
-    projects,
-    isLoading,
-    onCreateClick,
-}: ProjectsListProps) {
+export function ProjectList({ projects, isLoading }: ProjectListProps) {
     if (isLoading) {
         return (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: 6 }).map((_, i) => (
-                    <div
-                        key={i}
-                        className="h-50 rounded-xl border bg-card p-6 space-y-4"
-                    >
-                        <div className="flex justify-between">
-                            <Skeleton className="h-5 w-1/2" />
-                            <Skeleton className="h-5 w-8" />
-                        </div>
-                        <Skeleton className="h-4 w-full" />
-                        <div className="mt-auto pt-4 flex items-center gap-2 border-t">
-                            <Skeleton className="h-6 w-6 rounded-full" />
-                            <Skeleton className="h-4 w-20" />
-                        </div>
-                    </div>
-                ))}
+            <div className="flex justify-center items-center h-64">
+                <Loader2 className="w-8 h-8 animate-spin text-primary/50" />
             </div>
         );
     }
 
-    if (projects.length === 0) {
+    if (!projects || projects.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-100 border-2 border-dashed rounded-lg p-8 text-center animate-in fade-in-50">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mb-4">
-                    <Plus className="h-6 w-6 text-primary" />
+            <div className="flex flex-col items-center justify-center h-64 text-muted-foreground border-2 border-dashed rounded-xl bg-muted/20">
+                <div className="bg-muted p-4 rounded-full mb-4">
+                    <FolderOpen className="w-8 h-8 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold">No projects found</h3>
-                <p className="text-muted-foreground mb-4 max-w-sm text-sm">
-                    You haven't created any projects yet. Create your first one
-                    to get started.
+                <h3 className="text-lg font-medium text-foreground">
+                    No projects yet
+                </h3>
+                <p className="text-sm">
+                    Create your first project to get started.
                 </p>
-                <Button onClick={onCreateClick}>Create Project</Button>
             </div>
         );
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in-50">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-32 px-4 overflow-y-auto">
             {projects.map((project) => (
                 <ProjectCard key={project.id} project={project} />
             ))}

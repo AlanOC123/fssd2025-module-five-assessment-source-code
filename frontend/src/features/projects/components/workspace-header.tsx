@@ -1,0 +1,115 @@
+import { useState, useEffect } from "react";
+import { Share2, Bell, ChevronLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router";
+import { useProjectWorkspace } from "../hooks";
+
+export function WorkspaceHeader() {
+    const navigate = useNavigate();
+    // Connect to the Brain 🧠
+    const { project, isOwner, updateTitle } = useProjectWorkspace();
+
+    // Local state for smooth typing (syncs with Context when data changes)
+    const [localTitle, setLocalTitle] = useState(project ? project.title : "");
+
+    useEffect(() => {
+        const updateLocalTitle = () => {
+            const newTitle = project ? project.title : "";
+            setLocalTitle(newTitle);
+        }
+
+        updateLocalTitle()
+
+    }, [project?.title, project]);
+
+    const handleBlur = () => {
+        // Only trigger API call if value actually changed
+        if (localTitle.trim() !== project?.title) {
+            updateTitle(localTitle);
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === "Enter") {
+            e.currentTarget.blur();
+        }
+    };
+
+    return (
+        <header className="h-14 border-b bg-background flex items-center justify-between px-4 shrink-0 gap-4">
+            {/* Left Section: Navigation & Title */}
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="shrink-0 md:hidden -ml-2"
+                    onClick={() => navigate("/projects")}
+                >
+                    <ChevronLeft className="w-5 h-5 text-muted-foreground" />
+                </Button>
+
+                {/* Click-to-Edit Title Input */}
+                <div className="relative flex-1 max-w-md group">
+                    <Input
+                        value={localTitle}
+                        onChange={(e) => setLocalTitle(e.target.value)}
+                        onBlur={handleBlur}
+                        onKeyDown={handleKeyDown}
+                        disabled={!isOwner}
+                        className={`
+                            h-9 px-2 text-lg font-semibold bg-transparent border-transparent 
+                            truncate transition-colors shadow-none
+                            ${
+                                isOwner
+                                    ? "hover:bg-muted/50 focus:bg-muted focus:border-input cursor-text"
+                                    : "cursor-default opacity-100"
+                            }
+                        `}
+                    />
+                    {/* Visual hint for owners on hover */}
+                    {isOwner && (
+                        <div className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            <span className="text-[10px] text-muted-foreground bg-background/80 px-1 rounded border">
+                                Edit
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Right Section: Global Actions */}
+            <div className="flex items-center gap-2">
+                {/* Notification Bell (Global or Project specific) */}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-muted-foreground hover:text-foreground"
+                >
+                    <Bell className="w-5 h-5" />
+                </Button>
+
+                {/* Share Button (Triggers Invite Modal) */}
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2 text-primary border-primary/20 bg-primary/5 hover:bg-primary/10 hidden sm:flex"
+                    onClick={() => console.log("Open Share Modal")}
+                >
+                    <Share2 className="w-4 h-4" />
+                    Share
+                </Button>
+
+                {/* Mobile Share Icon */}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="sm:hidden text-primary"
+                    onClick={() => console.log("Open Share Modal")}
+                >
+                    <Share2 className="w-5 h-5" />
+                </Button>
+            </div>
+        </header>
+    );
+}

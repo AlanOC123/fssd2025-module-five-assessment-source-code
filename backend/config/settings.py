@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.projects',
     'apps.tasks',
+    'apps.notifications',
 ]
 
 SITE_ID = 1

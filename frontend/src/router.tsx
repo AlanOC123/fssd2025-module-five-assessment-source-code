@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router";
 
 import { AuthLayout, AppLayout, RootLayout } from "./layouts";
 import { LoginPage, RegisterPage, ResetPasswordPage, ConfirmPasswordResetPage } from "./pages";
-import { HomePage, ProjectsPage, InboxPage, SettingsPage, ProjectDetailsPage } from "./pages";
+import { HomePage, ProjectsPage, InboxPage, SettingsPage, ProjectWorkspacePage } from "./pages";
 
 const AUTH_ROOT = "auth";
 const PASSWORD_ROOT = `${AUTH_ROOT}/password`;
@@ -54,7 +54,7 @@ export const router = createBrowserRouter([
                     { index: true, element: <HomePage /> },
 
                     { path: "projects", element: <ProjectsPage /> },
-                    { path: "projects/:projectId", element: <ProjectDetailsPage /> },
+                    { path: "projects/:projectId", element: <ProjectWorkspacePage /> },
 
                     { path: "inbox", element: <InboxPage /> },
                     { path: "settings", element: <SettingsPage /> }

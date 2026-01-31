@@ -4,3 +4,4 @@ export * from './delete-project';
 export * from './create-project';
 export * from './pin-project';
 export * from './update-project';
+export * from './endpoints';

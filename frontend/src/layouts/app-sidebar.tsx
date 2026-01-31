@@ -10,7 +10,6 @@ import { PinnedProjectsNav } from "@/features";
 
 export function AppSidebar() {
     const { data: user, isLoading } = useGetActiveUserProfile();
-    console.log(user)
 
     return (
         <Sidebar className="[grid-area:sidebar]">

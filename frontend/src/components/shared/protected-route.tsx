@@ -14,8 +14,6 @@ export function ProtectedRoute({ children }: BaseLayoutProps) {
 
     const { user, isLoading } = auth;
 
-    console.log(user)
-
     if (isLoading) {
         return <LoadingPage />
     }

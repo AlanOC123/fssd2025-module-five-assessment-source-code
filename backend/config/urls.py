@@ -24,7 +24,8 @@ urlpatterns = [
     path('api/auth/password/change/', PasswordChangeView.as_view(), name="rest_password_change"),
 
     path("api/projects/", include("apps.projects.urls")),
-    path("api/profiles/", include("apps.users.urls"))
+    path("api/profiles/", include("apps.users.urls")),
+    path("api/tasks/", include("apps.tasks.urls"))
 ]
 
 if settings.DEBUG:

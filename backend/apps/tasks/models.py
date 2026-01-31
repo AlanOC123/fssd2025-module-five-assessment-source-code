@@ -3,7 +3,6 @@ from apps.users.models import UserProfile
 from apps.projects.models import Project
 
 class Task(models.Model):
-    # 1. Core Info
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     project = models.ForeignKey(

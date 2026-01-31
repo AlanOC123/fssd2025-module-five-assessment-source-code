@@ -1,4 +1,6 @@
 export * from './auth';
 export * from './projects';
-export * from './search';
 export * from './users';
+export * from './tasks';
+export * from './notifications';
+export * from './comments';

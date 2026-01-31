@@ -1,5 +1,5 @@
-from .models import Project, PinnedProject
-from .serializers import ProjectListSerializer, ProjectDetailSerializer, ProjectCreateSerializer
+from .models import Project, PinnedProject, ProjectComment, ProjectMembership
+from .serializers import ProjectListSerializer, ProjectDetailSerializer, ProjectCreateSerializer, ProjectCommentSerializer
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -16,6 +16,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     search_fields = ["title", "owner__email", "description"]
     ordering_fields = ["updated_at", "created_at"]
+    lookup_value_regex = r'\d+'
 
     def get_serializer_class(self):
         if self.action in ["retrieve", "update", "partial_update"]:
@@ -64,4 +65,41 @@ class ProjectViewSet(viewsets.ModelViewSet):
             return Response({ "status": "unpinned", "is_pinned": False })
     
         return Response({ "status": "pinned", "is_pinned": True })
+
+    @action(detail=True, methods=['post'], url_path="respond_invite")
+    def respond_invite(self, request, pk=None):
+        project = self.get_object()
+        status = request.data.get("status")
+
+        if status not in ['active', 'rejected']:
+            return Response({ 'detail': 'Invalid status' }, status=400)
+        
+        try:
+            membership = ProjectMembership.objects.get(
+                project=project,
+                user=request.user,
+                status=ProjectMembership.Status.PENDING
+            )
+
+            if status == 'active':
+                membership.delete()
+                return Response({ 'message': "Invitation Accepted" })
+            
+            if status == 'rejected':
+                membership.delete()
+                return Response({ 'message': 'Invitation Declined' })
+        
+        except ProjectMembership.DoesNotExist:
+            return Response({ 'detail': 'No pending invitation found' }, status=404)
+
+class ProjectCommentViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ProjectCommentSerializer
+    queryset = ProjectComment.objects.all()
+    
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['project']
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 

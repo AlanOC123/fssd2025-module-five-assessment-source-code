@@ -108,15 +108,8 @@ export function StatusInput() {
     const name = "status";
 
     const {
-        formState: { errors, touchedFields },
-        watch,
         control,
     } = useFormContext();
-
-    const value = watch(name);
-
-    const showSuccessIcon = !errors[name] && value && typeof value === "string";
-    const showError = errors[name] && touchedFields[name];
 
     return (
         <Controller
@@ -137,17 +130,7 @@ export function StatusInput() {
                             <SelectItem value="pending">Pending</SelectItem>
                             <SelectItem value="active">Active</SelectItem>
                         </SelectContent>
-                        {showSuccessIcon && (
-                            <InputGroupAddon>
-                                <CheckCircle className="text-success" />
-                            </InputGroupAddon>
-                        )}
                     </Select>
-                    {showError && (
-                        <p className="text-error text-sm">
-                            {errors[name]?.message as string}
-                        </p>
-                    )}
                 </Field>
             )}
         ></Controller>

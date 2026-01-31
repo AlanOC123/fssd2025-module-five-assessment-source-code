@@ -6,3 +6,5 @@ export * from "./use-update-project";
 export * from "./use-pin-project";
 export * from "./use-search-projects";
 export * from './use-get-pinned-projects';
+export * from './use-project-workspace';
+export * from './keys';

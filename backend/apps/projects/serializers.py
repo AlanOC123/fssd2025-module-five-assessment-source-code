@@ -1,4 +1,4 @@
-from .models import Project, ProjectMembership
+from .models import Project, ProjectMembership, ProjectComment
 from rest_framework import serializers
 from apps.users.models import UserProfile
 from apps.users.serializers import UserProfileSerializer
@@ -45,6 +45,7 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
     owner = UserProfileSerializer(source="owner.profile", read_only=True)
     members = serializers.SerializerMethodField()
     is_pinned = serializers.BooleanField(read_only=True)
+    progress = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
@@ -59,7 +60,8 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             "start_date",
             "end_date",
             "updated_at",
-            "is_pinned"
+            "is_pinned",
+            "progress"
         ]
 
         read_only_fields = ["created_at", "updated_at"]
@@ -70,3 +72,20 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
         profiles = [m.user.profile for m in active_memberships]
 
         return UserProfileSerializer(profiles, many=True).data
+
+    def get_progress(self, obj):
+        total_tasks = obj.tasks.count()
+        
+        if total_tasks == 0:
+            return 0
+            
+        completed_tasks = obj.tasks.filter(is_completed=True).count()
+        return round((completed_tasks / total_tasks) * 100)
+
+class ProjectCommentSerializer(serializers.ModelSerializer):
+    author_detail = UserProfileSerializer(source='author', read_only=True)
+    
+    class Meta:
+        model = ProjectComment
+        fields = ['id', 'project', 'author', 'author_detail', 'content', 'created_at']
+        read_only_fields = ['author', 'created_at']

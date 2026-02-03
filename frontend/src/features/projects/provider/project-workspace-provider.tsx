@@ -60,8 +60,10 @@ export function ProjectWorkspaceProvider({
         if (action === "commit") {
             if (!isOwner || !project) return;
 
+            console.log()
+
             updateProject({
-                id: projectId,
+                projectId,
                 data: { [field]: value }
             })
         }

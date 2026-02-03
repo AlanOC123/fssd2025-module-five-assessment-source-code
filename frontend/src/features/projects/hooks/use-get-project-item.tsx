@@ -7,7 +7,7 @@ export function useGetProjectItem(id: number) {
     return useQuery<ProjectDetailItem>({
         queryKey: PROJECTS_KEYS.detailed(id),
         queryFn: () => getProjectItem(id),
-        enabled: !!id,
+        enabled: !!id && !isNaN(Number(id)),
         retry: false
     });
 }

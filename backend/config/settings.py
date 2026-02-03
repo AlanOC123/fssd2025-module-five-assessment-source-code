@@ -14,6 +14,9 @@ from datetime import timedelta
 import os
 import dj_database_url
 
+def csv_list(v: str):
+    return [s.strip() for s in v.split(",") if s.strip()]
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,10 +27,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', True, cast=bool)
+ENVIRONMENT = config("ENVIRONMENT", default="development")
+IS_PROD = ENVIRONMENT == "production"
+
+DEBUG = config("DEBUG", default=not IS_PROD, cast=bool)
 
 # Hosts configuration
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip('') for s in v.split(',') ])
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default="localhost", cast=csv_list)
 
 
 # --- 1. Application Definition ---
@@ -155,11 +161,11 @@ AUTHENTICATION_BACKENDS = [
 # to communicate with this backend safely.
 
 CSRF_COOKIE_HTTPONLY = False  # Allows frontend to read the CSRF token if necessary
-CORS_ALLOW_CREDENTIALS = config('CORS_ALLOW_CREDENTIALS', cast=bool)
+CORS_ALLOW_CREDENTIALS = config("CORS_ALLOW_CREDENTIALS", default=True, cast=bool)
 
 # Origins that are trusted to make requests
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', ["http://localhost:5173"], cast=lambda v: [s.strip('') for s in v.split(',')])
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', ["http://localhost:5173"], cast=lambda v: [s.strip('') for s in v.split(',')])
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', ["http://localhost:5173"], cast=csv_list)
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', ["http://localhost:5173"], cast=csv_list)
 
 
 # --- 5. JWT Configuration (SimpleJWT) ---
@@ -181,7 +187,10 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 AUTH_USER_MODEL = 'auth.User' # Standard User Model
 
 # Frontend URL to redirect users to after clicking the "Reset Password" email link
-PASSWORD_RESET_REDIRECT_LINK = "http://localhost:5173/auth"
+PASSWORD_RESET_REDIRECT_LINK = config(
+    "PASSWORD_RESET_REDIRECT_LINK",
+    default="http://localhost:5173/auth",
+)
 
 REST_AUTH = {
     # Custom Serializers (Injecting our custom logic)
@@ -206,28 +215,53 @@ REST_AUTH = {
     'JWT_AUTH_SAMESITE': 'Lax',
 }
 
+if IS_PROD:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+
+    REST_AUTH["JWT_AUTH_SECURE"] = True
+    REST_AUTH["JWT_AUTH_SAMESITE"] = "None"
+
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = "None"
+    CSRF_COOKIE_SAMESITE = "None"
+
 
 # --- 7. Production Security Overrides ---
 # If DEBUG is False (Production), enforce HTTPS and Secure Cookies.
 
-if not DEBUG:
+if IS_PROD:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE = True
+    CSRF_COOKIE_SECURE = True
     REST_AUTH["JWT_AUTH_SECURE"] = True
+
+# Render recommendations
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
 
 # --- 8. Email Configuration ---
 # Uses Gmail SMTP for sending password reset emails.
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+
+if IS_PROD:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+    DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+    EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+    DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="dev@localhost")
 
 
 # --- 9. Internationalization & Static Files ---

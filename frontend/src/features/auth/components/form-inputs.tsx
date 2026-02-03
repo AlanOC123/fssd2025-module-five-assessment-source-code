@@ -11,12 +11,13 @@ import {
 
 import {
     Mail,
-    MailCheck,
     KeyRound,
-    BadgeCheck,
     Eye,
     EyeOff,
-    CheckCircle,
+    CheckCircle2,
+    CalendarDays,
+    User,
+    AlertCircle,
 } from "lucide-react";
 import { cn } from "@/lib";
 
@@ -26,6 +27,20 @@ interface FormInputProps {
     placeholder: string;
 }
 
+/**
+ * Shared helper to determine input state styles.
+ * Returns classes for the InputGroup container based on validation state.
+ */
+const getInputStateClasses = (error: boolean, success: boolean) => {
+    if (error) {
+        return "border-destructive/80 ring-destructive/20 text-destructive focus-within:ring-destructive/30 bg-destructive/5";
+    }
+    if (success) {
+        return "border-green-500/60 ring-green-500/20 text-green-600 dark:text-green-400 focus-within:ring-green-500/30 bg-green-500/5";
+    }
+    return "focus-within:border-primary focus-within:ring-primary/20 bg-background/50 hover:bg-background/80 transition-all duration-200";
+};
+
 export function NameInputGroup({ name, label, placeholder }: FormInputProps) {
     const {
         register,
@@ -34,38 +49,53 @@ export function NameInputGroup({ name, label, placeholder }: FormInputProps) {
     } = useFormContext();
     const value = watch(name);
 
-    const showSuccessIcon = !errors[name] && value && typeof value === "string";
-    const showError = errors[name] && touchedFields[name];
+    const isError = !!(errors[name] && touchedFields[name]);
+    const isSuccess = !errors[name] && value && value.length > 2; // Simple validation check
 
     return (
-        <FieldGroup>
-            <FieldLabel htmlFor={name}>{label}</FieldLabel>
-            <InputGroup>
+        <FieldGroup className="space-y-1.5">
+            <FieldLabel
+                htmlFor={name}
+                className="text-sm font-medium text-foreground"
+            >
+                {label}
+            </FieldLabel>
+            <InputGroup
+                className={cn(
+                    "overflow-hidden rounded-lg border",
+                    getInputStateClasses(isError, isSuccess),
+                )}
+            >
+                <InputGroupAddon className="px-3 text-muted-foreground/70">
+                    <User
+                        className={cn(
+                            "h-4 w-4",
+                            isError && "text-destructive",
+                            isSuccess && "text-green-500",
+                        )}
+                    />
+                </InputGroupAddon>
                 <InputGroupInput
-                    className={cn(
-                        showSuccessIcon
-                            ? "text-success"
-                            : showError
-                            ? "text-error"
-                            : ""
-                    )}
-                    data-valid={showSuccessIcon}
-                    aria-invalid={showError}
+                    id={name}
                     type="text"
                     placeholder={placeholder}
-                    id={name}
+                    className="bg-transparent border-none focus-visible:ring-0 placeholder:text-muted-foreground/50 h-11"
+                    aria-invalid={isError}
                     {...register(name)}
                 />
-                {showSuccessIcon && (
-                    <InputGroupAddon>
-                        <CheckCircle className="text-success" />
+                {isSuccess && (
+                    <InputGroupAddon className="pr-3">
+                        <CheckCircle2 className="h-4 w-4 text-green-500 animate-in zoom-in spin-in-90 duration-300" />
                     </InputGroupAddon>
                 )}
             </InputGroup>
-            {showError && (
-                <p className="text-error text-sm">
-                    {errors[name]?.message as string}
-                </p>
+            {isError && (
+                <div className="flex items-center gap-2 text-destructive animate-in slide-in-from-top-1">
+                    <AlertCircle className="h-3 w-3" />
+                    <p className="text-xs font-medium">
+                        {errors[name]?.message as string}
+                    </p>
+                </div>
             )}
         </FieldGroup>
     );
@@ -79,41 +109,54 @@ export function DateOfBirthInputGroup() {
     } = useFormContext();
 
     const name = "date_of_birth";
-
     const value = watch(name);
 
-    const showSuccessIcon =
-        !errors[name] && value && typeof value === "string";
-    const showError = errors[name] && touchedFields[name];
+    const isError = !!(errors[name] && touchedFields[name]);
+    const isSuccess = !errors[name] && value;
 
     return (
-        <FieldGroup>
-            <FieldLabel htmlFor={name}>Date of Birth</FieldLabel>
-            <InputGroup>
+        <FieldGroup className="space-y-1.5">
+            <FieldLabel
+                htmlFor={name}
+                className="text-sm font-medium text-foreground"
+            >
+                Date of Birth
+            </FieldLabel>
+            <InputGroup
+                className={cn(
+                    "overflow-hidden rounded-lg border",
+                    getInputStateClasses(isError, isSuccess),
+                )}
+            >
+                <InputGroupAddon className="px-3 text-muted-foreground/70">
+                    <CalendarDays
+                        className={cn(
+                            "h-4 w-4",
+                            isError && "text-destructive",
+                            isSuccess && "text-green-500",
+                        )}
+                    />
+                </InputGroupAddon>
                 <InputGroupInput
-                    type="date"
                     id={name}
-                    className={cn(
-                        showSuccessIcon
-                            ? "text-success"
-                            : showError
-                            ? "text-error"
-                            : ""
-                    )}
-                    data-valid={showSuccessIcon}
-                    aria-invalid={showError}
+                    type="date"
+                    className="bg-transparent border-none focus-visible:ring-0 h-11"
+                    aria-invalid={isError}
                     {...register(name)}
                 />
-                {showSuccessIcon && (
-                    <InputGroupAddon>
-                        <CheckCircle className="text-success" />
+                {isSuccess && (
+                    <InputGroupAddon className="pr-3">
+                        <CheckCircle2 className="h-4 w-4 text-green-500 animate-in zoom-in duration-300" />
                     </InputGroupAddon>
                 )}
             </InputGroup>
-            {showError && (
-                <p className="text-destructive text-sm">
-                    {errors[name]?.message as string}
-                </p>
+            {isError && (
+                <div className="flex items-center gap-2 text-destructive animate-in slide-in-from-top-1">
+                    <AlertCircle className="h-3 w-3" />
+                    <p className="text-xs font-medium">
+                        {errors[name]?.message as string}
+                    </p>
+                </div>
             )}
         </FieldGroup>
     );
@@ -127,61 +170,55 @@ export function EmailInputGroup({ name, label, placeholder }: FormInputProps) {
     } = useFormContext();
     const value = watch(name);
 
-    const showSuccessIcon = !errors[name] && value && typeof value === "string";
-    const showError = errors[name] && touchedFields[name];
+    const isError = !!(errors[name] && touchedFields[name]);
+    // Basic regex check for visual feedback only (React Hook Form handles real validation)
+    const isSuccess =
+        !errors[name] && value && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
     return (
-        <FieldGroup>
-            <FieldLabel htmlFor={name}>{label}</FieldLabel>
-            <InputGroup>
-                <InputGroupAddon>
-                    {name.includes("confirm") ? (
-                        <MailCheck
-                            className={cn(
-                                showSuccessIcon
-                                    ? "text-success"
-                                    : showError
-                                    ? "text-error"
-                                    : ""
-                            )}
-                        />
-                    ) : (
-                        <Mail
-                            className={cn(
-                                showSuccessIcon
-                                    ? "text-success"
-                                    : showError
-                                    ? "text-error"
-                                    : ""
-                            )}
-                        />
-                    )}
+        <FieldGroup className="space-y-1.5">
+            <FieldLabel
+                htmlFor={name}
+                className="text-sm font-medium text-foreground"
+            >
+                {label}
+            </FieldLabel>
+            <InputGroup
+                className={cn(
+                    "overflow-hidden rounded-lg border",
+                    getInputStateClasses(isError, isSuccess),
+                )}
+            >
+                <InputGroupAddon className="px-3 text-muted-foreground/70">
+                    <Mail
+                        className={cn(
+                            "h-4 w-4",
+                            isError && "text-destructive",
+                            isSuccess && "text-green-500",
+                        )}
+                    />
                 </InputGroupAddon>
                 <InputGroupInput
+                    id={name}
                     type="email"
                     placeholder={placeholder}
-                    className={cn(
-                        showSuccessIcon
-                            ? "text-success"
-                            : showError
-                            ? "text-error"
-                            : ""
-                    )}
-                    id={name}
-                    data-valid={showSuccessIcon}
-                    aria-invalid={showError}
+                    className="bg-transparent border-none focus-visible:ring-0 placeholder:text-muted-foreground/50 h-11"
+                    aria-invalid={isError}
                     {...register(name)}
                 />
-                {showSuccessIcon && (
-                    <InputGroupAddon>
-                        <CheckCircle className="text-success" />
+                {isSuccess && (
+                    <InputGroupAddon className="pr-3">
+                        <CheckCircle2 className="h-4 w-4 text-green-500 animate-in zoom-in duration-300" />
                     </InputGroupAddon>
                 )}
             </InputGroup>
-            {showError && (
-                <p className="text-destructive text-sm">
-                    {errors[name]?.message as string}
-                </p>
+            {isError && (
+                <div className="flex items-center gap-2 text-destructive animate-in slide-in-from-top-1">
+                    <AlertCircle className="h-3 w-3" />
+                    <p className="text-xs font-medium">
+                        {errors[name]?.message as string}
+                    </p>
+                </div>
             )}
         </FieldGroup>
     );
@@ -198,69 +235,66 @@ export function PasswordInputGroup({
         formState: { errors, touchedFields },
         watch,
     } = useFormContext();
-    const value = watch(name);
 
-    const showSuccessIcon = !errors[name] && value && typeof value === "string";
-    const showError = errors[name] && touchedFields[name];
+    const value = watch(name);
+    const isError = !!(errors[name] && touchedFields[name]);
+    // Only show green success check if no errors and length > 5
+    const isSuccess = !errors[name] && value && value.length > 5;
 
     return (
-        <FieldGroup>
-            <FieldLabel htmlFor={name}>{label}</FieldLabel>
-            <InputGroup>
-                <InputGroupAddon>
-                    {name.includes("confirm") ? (
-                        <BadgeCheck
-                            className={cn(
-                                showSuccessIcon
-                                    ? "text-success"
-                                    : showError
-                                    ? "text-error"
-                                    : ""
-                            )}
-                        />
-                    ) : (
-                        <KeyRound
-                            className={cn(
-                                showSuccessIcon
-                                    ? "text-success"
-                                    : showError
-                                    ? "text-error"
-                                    : ""
-                            )}
-                        />
-                    )}
+        <FieldGroup className="space-y-1.5">
+            <FieldLabel
+                htmlFor={name}
+                className="text-sm font-medium text-foreground"
+            >
+                {label}
+            </FieldLabel>
+            <InputGroup
+                className={cn(
+                    "overflow-hidden rounded-lg border",
+                    getInputStateClasses(isError, isSuccess),
+                )}
+            >
+                <InputGroupAddon className="px-3 text-muted-foreground/70">
+                    <KeyRound
+                        className={cn(
+                            "h-4 w-4",
+                            isError && "text-destructive",
+                            isSuccess && "text-green-500",
+                        )}
+                    />
                 </InputGroupAddon>
                 <InputGroupInput
+                    id={name}
                     type={showPassword ? "text" : "password"}
                     placeholder={placeholder}
-                    className={cn(
-                        showSuccessIcon
-                            ? "text-success"
-                            : showError
-                            ? "text-error"
-                            : ""
-                    )}
-                    data-valid={showSuccessIcon}
-                    aria-invalid={showError}
-                    id={name}
+                    className="bg-transparent border-none focus-visible:ring-0 placeholder:text-muted-foreground/50 h-11"
+                    aria-invalid={isError}
                     {...register(name)}
                 />
-                {showSuccessIcon && (
-                    <InputGroupAddon>
-                        <CheckCircle className="text-success" />
-                    </InputGroupAddon>
-                )}
+
+                {/* Toggle Password Visibility Button */}
                 <InputGroupButton
-                    variant={"ghost"}
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    className="hover:bg-transparent text-muted-foreground hover:text-foreground h-11 w-11"
                     onClick={() => setShowPassword(!showPassword)}
                 >
-                    {showPassword ? <EyeOff /> : <Eye />}
+                    {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                    ) : (
+                        <Eye className="h-4 w-4" />
+                    )}
                 </InputGroupButton>
             </InputGroup>
-            {showError && (
-                <p className="text-destructive text-sm">
-                    {errors[name]?.message as string}
-                </p>
+            {isError && (
+                <div className="flex items-center gap-2 text-destructive animate-in slide-in-from-top-1">
+                    <AlertCircle className="h-3 w-3" />
+                    <p className="text-xs font-medium">
+                        {errors[name]?.message as string}
+                    </p>
+                </div>
             )}
         </FieldGroup>
     );

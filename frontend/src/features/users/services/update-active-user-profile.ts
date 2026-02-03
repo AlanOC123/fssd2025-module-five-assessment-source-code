@@ -4,7 +4,7 @@ import type { UpdateActiveUserRequest, UserProfile } from "../types";
 
 export async function updateActiveUserProfile({ data }: UpdateActiveUserRequest): Promise<UserProfile> {
     try {
-        const response = await client.patch<UserProfile>(USERS_ENDPOINTS.root, data);
+        const response = await client.patch<UserProfile>(USERS_ENDPOINTS.activeUser, data);
         return response.data
     } catch (err) {
         console.error(err);

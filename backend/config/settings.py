@@ -11,6 +11,8 @@ This configuration file manages the core architecture of the backend, focusing o
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -101,9 +103,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # --- 2. Database Configuration ---
 # Uses 'python-decouple' to switch databases based on environment variables.
 
-USE_POSTGRES = config('USE_POSTGRES', True, cast=bool)
+USE_POSTGRES = config('USE_POSTGRES', default=True, cast=bool)
 
-if USE_POSTGRES:
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
+    }
+elif USE_POSTGRES:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',

@@ -1,5 +1,4 @@
 services:
-  # Backend API (Django)
   - type: web
     name: opus-api
     runtime: python
@@ -24,11 +23,9 @@ services:
       - key: USE_POSTGRES
         value: "True"
 
-  # Frontend (Vite/React) as a static site
   - type: web
     name: opus-app
     runtime: static
-    plan: free
     buildCommand: "cd frontend && npm ci && npm run build"
     staticPublishPath: "frontend/dist"
     routes:

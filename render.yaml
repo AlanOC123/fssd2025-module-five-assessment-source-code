@@ -35,3 +35,7 @@ services:
     envVars:
       - key: VITE_API_URL
         value: "https://opus-api.onrender.com"
+
+databases:
+  - name: opus_db
+    plan: free

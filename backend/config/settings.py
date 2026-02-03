@@ -35,6 +35,9 @@ DEBUG = config("DEBUG", default=not IS_PROD, cast=bool)
 # Hosts configuration
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default="localhost", cast=csv_list)
 
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 
 # --- 1. Application Definition ---
 # Split into Core (Framework), Third-party (Libs), and Local (Your Code) for clarity.

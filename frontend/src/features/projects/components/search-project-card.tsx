@@ -1,11 +1,11 @@
 import { CommandItem } from "@/components";
-import type { ProjectList } from "../types";
+import type { ProjectListItem } from "../types";
 
 export function SearchProjectCard({
     project,
     handleSelect,
 }: {
-    project: ProjectList;
+    project: ProjectListItem;
     handleSelect: (value: string) => void;
 }) {
     return (

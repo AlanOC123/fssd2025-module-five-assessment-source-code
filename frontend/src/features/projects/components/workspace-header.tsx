@@ -84,7 +84,6 @@ export function WorkspaceHeader() {
                 <ShareProjectModal
                     open={isShareOpen}
                     onOpenChange={setShareOpen}
-                    projectName={project?.title || "Project"}
                 />
 
                 {/* Mobile Share Icon */}

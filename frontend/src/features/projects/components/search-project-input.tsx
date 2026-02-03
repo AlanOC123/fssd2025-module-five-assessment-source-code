@@ -1,5 +1,4 @@
 import { CommandInput } from "@/components";
-import { useSearchProjects } from "../hooks";
 
 export function SearchProjectInput({ query, setQuery }) {
     return (

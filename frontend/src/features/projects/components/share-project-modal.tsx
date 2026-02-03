@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Send, UserX, Clock, Loader2 } from "lucide-react";
+import { UserX, Clock, Loader2 } from "lucide-react";
 import { ResponsiveModal, Button, Input, Label } from "@/components"; // Adjust path if needed
 import { UserAvatar } from "@/features/users";
 import { useProjectWorkspace } from "../hooks/use-project-workspace";

@@ -5,17 +5,13 @@ import {
     Card,
     CardHeader,
     CardTitle,
-    CardDescription,
     CardContent,
     CardFooter,
 } from "@/components/ui/card";
-import { Badge } from "@/components";
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/features/users/components";
 import type { ProjectListItem } from "../types";
 import { usePinProject } from "../hooks/use-pin-project";
-// Ensure this path matches your router
-import { APP_PATHS } from "@/router";
 
 interface ProjectCardProps {
     project: ProjectListItem;

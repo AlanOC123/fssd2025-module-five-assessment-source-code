@@ -1,0 +1,10 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle (Modern Dark Slate) -->
+  <circle cx="256" cy="256" r="240" fill="#0F172A"/>
+  
+  <!-- Stylized 'O' (Opus) -->
+  <path d="M256 100C169.84 100 100 169.84 100 256C100 342.16 169.84 412 256 412C342.16 412 412 342.16 412 256C412 169.84 342.16 100 256 100ZM256 360C198.56 360 152 313.44 152 256C152 198.56 198.56 152 256 152C313.44 152 360 198.56 360 256C360 313.44 313.44 360 256 360Z" fill="white"/>
+  
+  <!-- Success/Completion Checkmark (Indigo/Primary Color) -->
+  <path d="M210 260L245 295L330 210" stroke="#6366F1" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

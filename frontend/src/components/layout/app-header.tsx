@@ -30,15 +30,13 @@ export function AppHeader({ open, onOpenNotifications }: AppHeaderProps) {
     return (
         <header className="h-16 border-b bg-background flex items-center justify-between px-6 shrink-0 z-50">
             {/* Logo Section */}
-            <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                    <span className="text-primary-foreground font-bold text-xl">
-                        P
-                    </span>
-                </div>
-                <span className="font-bold text-xl tracking-tight">
-                    Projectly
-                </span>
+            <div onClick={() => navigate("/")} className="flex items-center gap-2">
+                <img
+                    src="/logo.svg"
+                    alt="Opus Logo"
+                    className="w-8 h-8 object-contain"
+                />
+                <span className="font-bold text-xl tracking-tight">Opus</span>
             </div>
 
             {/* Action Buttons Section */}
@@ -94,8 +92,15 @@ export function AppHeader({ open, onOpenNotifications }: AppHeaderProps) {
                         <div className="px-2 py-1.5 text-sm font-medium border-b mb-1">
                             {user?.first_name} {user?.last_name}
                         </div>
-                        <DropdownMenuItem onClick={() => navigate(APP_PATHS.app.settings)}>Profile Settings</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => logout()} className="text-destructive">
+                        <DropdownMenuItem
+                            onClick={() => navigate(APP_PATHS.app.settings)}
+                        >
+                            Profile Settings
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => logout()}
+                            className="text-destructive"
+                        >
                             Logout
                         </DropdownMenuItem>
                     </DropdownMenuContent>

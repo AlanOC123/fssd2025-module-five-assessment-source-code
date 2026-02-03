@@ -8,7 +8,7 @@ import { ShareProjectModal } from "./share-project-modal";
 
 export function WorkspaceHeader() {
     const navigate = useNavigate();
-    // Connect to the Brain 🧠
+    // Connect to the Provider
     const { project, isOwner, makeChanges } = useProjectWorkspace();
     const [isShareOpen, setShareOpen] = useState(false);
 

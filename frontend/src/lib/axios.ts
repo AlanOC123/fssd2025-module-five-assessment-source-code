@@ -1,8 +1,8 @@
 import axios from "axios";
-const ROOT = "/api"
+const API_ROOT = `${import.meta.env.VITE_API_URL}/api`;
 
 // Axios instance
 export const api = axios.create({
-    baseURL: ROOT,
+    baseURL: API_ROOT,
     withCredentials: true, // Required for JWT Cookie Auth
 });

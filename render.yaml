@@ -1,0 +1,66 @@
+services:
+
+  # Core launch service
+  - type: web
+    name: opus-api
+    runtime: python
+    plan: free
+    buildCommand: "cd backend && ./build.sh"
+    startCommand: "cd backend && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: opus_db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "opus-api.onrender.com,opus-app.onrender.com"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://opus-app.onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://opus-app.onrender.com"
+      - key: USE_POSTGRES
+        value: "True"
+
+  # CRON Job for Overdue tasks
+  - type: cron
+    name: check-overdue-tasks
+    runtime: python
+    plan: free
+    schedule: "0 * * * *"   # every hour
+    buildCommand: "cd backend && ./build.sh"
+    startCommand: >
+      cd backend &&
+      python manage.py check_overdue
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: opus_db
+          property: connectionString
+      - key: SECRET_KEY
+        fromService:
+          name: opus-api
+          type: web
+          envVarKey: SECRET_KEY
+
+# Static launch (Frontend)
+staticSites:
+  - name: opus-app
+    plan: free
+    buildCommand: "cd frontend && npm ci && npm run build"
+    publishPath: "frontend/dist"
+    routes:
+      - type: rewrite
+        source: "/*"
+        destination: "/index.html"
+    envVars:
+      - key: VITE_API_URL
+        value: "https://opus-api.onrender.com"
+
+# Database
+databases:
+  - name: opus_db
+    plan: free

@@ -1,29 +1,28 @@
-import { AppHeader } from "./app-header";
-import { AppSidebar } from "./app-sidebar";
-import { CreateProjectForm, SearchProjectModal } from "@/features";
-import { AppNav } from "./app-nav";
 import { Outlet } from "react-router";
-import { SidebarProvider } from "@/components";
-import { AppProvider } from "@/providers";
-import { ProtectedRoute } from "@/components";
+import { ProtectedRoute, AppHeader } from "@/components";
+import { NotificationsSheet } from "@/features";
+import { useState } from "react";
 
 export function AppLayout() {
+    const [notificationsOpen, setNotificationsOpen] = useState(false)
+
     return (
         <ProtectedRoute>
-            <AppProvider>
-                <SidebarProvider>
-                    <div className="relative w-screen h-screen grid [grid-template-areas:'header_header'_'sidebar_main'] grid-cols-[auto_1fr] grid-rows-[auto_1fr] bg-background">
-                        <AppHeader />
-                        <AppSidebar />
-                        <SearchProjectModal />
-                        <CreateProjectForm />
-                        <AppNav />
-                        <main className="[grid-area:main] w-full h-full overflow-hidden">
-                            <Outlet />
-                        </main>
-                    </div>
-                </SidebarProvider>
-            </AppProvider>
+            <div className="h-screen w-screen flex flex-col bg-background overflow-hidden">
+                {/* State is lifted here so the Header can toggle the Sheet */}
+                <AppHeader
+                    open={notificationsOpen}
+                    onOpenNotifications={setNotificationsOpen}
+                />
+                <NotificationsSheet
+                    open={notificationsOpen}
+                    onOpenChange={setNotificationsOpen}
+                />
+                {/* Main Content Area */}
+                <main className="flex-1 min-h-0 relative">
+                    <Outlet />
+                </main>
+            </div>
         </ProtectedRoute>
     );
 }

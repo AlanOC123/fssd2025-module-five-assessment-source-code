@@ -4,10 +4,15 @@ import type { ProjectListItem, ProjectListParamsProps } from "../types";
 
 export async function getProjectList(params: ProjectListParamsProps): Promise<ProjectListItem[]> {
     try {
-        const response = await client.get<ProjectListItem[]>(PROJECT_ENDPOINTS.list, { params });
+        // The 'client' instance automatically handles the JWT Cookies.
+        // We pass 'params' (like search queries) directly to Axios.
+        const response = await client.get<ProjectListItem[]>(
+            PROJECT_ENDPOINTS.list,
+            { params },
+        );
         return response.data;
     } catch (err) {
         console.error(err);
-        throw err;
+        throw err; // Propagate error so React Query can catch it
     }
 }

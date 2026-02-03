@@ -4,6 +4,9 @@ from apps.users.models import UserProfile
 from typing import cast, TYPE_CHECKING, Dict, Any
 from dj_rest_auth.registration.serializers import RegisterSerializer
 
+# Type Hinting Block:
+# This ensures IDEs (VS Code/PyCharm) understand the relationship between User 
+# and Profile without causing circular import errors at runtime.
 if TYPE_CHECKING:
     class UserWithProfile(User):
         profile: UserProfile
@@ -14,8 +17,16 @@ else:
     UserWithProfile = User
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the UserProfile model.
+
+    Design Choice - Flattening Data:
+    Instead of nesting the User object (which would look like { profile: { user: { email: ... } } }),
+    I 'flattened' the critical user fields (email, id) directly onto the profile object. To make the frontend cleaner.
+    """
     user_id = serializers.IntegerField(source="user.pk", read_only=True)
     email = serializers.CharField(source="user.email", read_only=True)
+    
     class Meta:
         model = UserProfile
         fields = [
@@ -27,9 +38,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ["full_name"]
 
     def update(self, instance, validated_data):
+        """
+        Custom update method to handle profile fields safely.
+        """
         writeable_fields = ["first_name", "last_name", "date_of_birth", "avatar"]
-
-        print(validated_data)
 
         for field in writeable_fields:
             if field in validated_data:
@@ -40,17 +52,37 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Minimal User serializer for authentication responses.
+    """
     class Meta:
         model = User
         fields = ["id", "email"]
 
+
 class CustomRegisterSerializer(RegisterSerializer):
-    username = None
+    """
+    Custom Registration Serializer.
+
+    This overrides the default 'dj_rest_auth' behavior.
+    
+    Problem:
+    The default library only saves username/password/email.
+    
+    Solution:
+    I added fields for First Name, Last Name, and DOB here. Then, overrided 
+    the `save()` method to extract this data and save it to the UserProfile 
+    immediately after the User is created.
+    """
+    username = None # We rely on email as the identifier
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     date_of_birth = serializers.DateField(required=True)
 
     def get_cleaned_data(self) -> Dict[str, Any]:
+        """
+        Passes custom fields to the adapter/signal (if used).
+        """
         writeable_fields = ["first_name", "last_name", "date_of_birth"]
         data = super().get_cleaned_data()
         val_data = cast(Dict[str, Any], self.validated_data)
@@ -61,15 +93,26 @@ class CustomRegisterSerializer(RegisterSerializer):
         return data
     
     def save(self, request) -> Any:
+        """
+        Save Logic:
+        1. Create the User (super().save()).
+        2. Ensure Username == Email (Business Rule).
+        3. Save the extra profile fields to the UserProfile model.
+        """
         writeable_fields = ["first_name", "last_name", "date_of_birth"]
+        
+        # 1. Create the User
         user: UserWithProfile = super().save(request)
 
+        # 2. Enforce Email as Username
         if user.username != user.email:
             user.username = user.email
             user.save(update_fields=["username"])
 
         val_data = cast(Dict[str, Any], self.validated_data)
 
+        # 3. Populate and Save the Profile
+        # Note: 'user.profile' exists because of the post_save signal in models.py
         for field in writeable_fields:
             value = val_data.get(field, "")
             profile = user.profile

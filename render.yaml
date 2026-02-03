@@ -32,7 +32,7 @@ services:
         destination: "/index.html"
     envVars:
       - key: VITE_API_URL
-        value: "https://opus-api.onrender.com"
+        value: "https://opus-api-66h8.onrender.com"
 
 databases:
   - name: opus_db

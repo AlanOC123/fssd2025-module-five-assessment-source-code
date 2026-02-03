@@ -1,246 +1,194 @@
-# Project Platform (Module 5 Assessment)
+Collaborative Project Management System
 
-Full-stack project platform built with:
+A full-stack project management solution designed to facilitate team collaboration, task tracking, and real-time communication. Built with a Django REST Framework backend and a React (TypeScript) frontend, utilizing a modern Service-Repository architectural pattern.
 
-* **Backend:** Django + Django REST Framework (DRF), JWT auth (SimpleJWT), dj-rest-auth + allauth, PostgreSQL
-* **Frontend:** React + Vite + TypeScript, TailwindCSS, shadcn/ui + Radix UI, React Router, TanStack React Query
+🚀 Tech Stack
 
-Repo structure:
+Frontend
 
-```txt
-source-code/
-  backend/   # Django API
-  frontend/  # React app
-```
+Core: React 18, TypeScript, Vite
 
----
+State & Networking: TanStack Query (React Query), Axios
 
-## Features
+Styling: Tailwind CSS, Radix UI / Shadcn UI
 
-### Authentication (Backend)
+Forms & Validation: React Hook Form, Zod
 
-* Register (`/api/auth/register/`)
-* Login (`/api/auth/login/`)
-* Logout (`/api/auth/logout/`)
-* Current user (`/api/auth/users/me/`)
-* JWT refresh (`/api/auth/token/refresh/`)
-* Password reset flow:
+Architecture: Feature-based folder structure (Service -> Hook -> Component)
 
-  * Request reset: `/api/auth/password/reset/`
-  * Confirmation redirect: `/api/auth/password/reset/confirm/<uidb64>/<token>/`
-  * Submit new password: `/api/auth/password/reset/confirm/submit/`
+Backend
 
-### Projects (Backend)
+Core: Python 3.12, Django 5.0
 
-* CRUD endpoints via DRF `ModelViewSet` under:
+API: Django REST Framework (DRF)
 
-  * `/api/projects/`
-  * `/api/projects/<id>/`
-* Search support using DRF `SearchFilter`:
+Authentication: JWT via dj-rest-auth (HTTPOnly Cookies for security)
 
-  * `GET /api/projects/?search=<query>`
-  * Searches: `title`, `owner__email`, `description`, `status`
-* Pin/unpin a project:
+Database: PostgreSQL
 
-  * `POST /api/projects/<id>/pin/`
-  * Toggles pinned state for the current user
-* Projects include:
+Async Tasks: Custom Django Management Commands (Overdue Checkers)
 
-  * `title`, `description`, `status` (`pending | active | complete | archived`)
-  * `start_date`, `end_date`
-  * `owner`
-  * membership model exists (`ProjectMembership`) with access levels and invite status
-  * pinned model (`PinnedProject`) for per-user pinning
+Infrastructure
 
-### Frontend
+Containerization: Docker, Docker Compose
 
-* React SPA with Vite + TypeScript
-* TailwindCSS styling + component patterns from shadcn/ui + Radix
-* React Router for navigation
-* TanStack React Query + Axios for API calls
-* Password reset UI flow exists in `src/features/auth/components/password-reset-flow/`
+Web Server: Nginx (Production serving)
 
----
+Storage: AWS S3 (Optional/Configurable for Media)
 
-## Tech Stack
+✨ Key Features
 
-### Backend
+🔐 Authentication & Security
 
-* Django 5.x
-* Django REST Framework
-* dj-rest-auth + django-allauth
-* djangorestframework-simplejwt
-* django-cors-headers
-* django-filter
-* PostgreSQL (via `psycopg2-binary`)
-* python-decouple for environment variables
+Secure Auth: JWT-based authentication stored in HTTPOnly cookies (XSS protection).
 
-### Frontend
+Account Management: Sign up, Login, Password Reset (via SMTP email), and Profile Management.
 
-* React 18 + TypeScript
-* Vite
-* TailwindCSS
-* Radix UI + shadcn/ui configuration
-* React Router
-* TanStack React Query
-* Axios
-* Framer Motion
-* react-three/fiber + drei
+Security Gates: Protected Routes on frontend; Permission Classes on backend.
 
----
+📂 Project Workspaces
 
-## Getting Started
+CRUD Operations: Create, Update, Delete projects.
 
-### Prerequisites
+Membership System: Invite users via email, manage roles (Admin/Editor/Viewer).
 
-* **Node.js** (18+ recommended)
-* **Python** 3.10+
-* **PostgreSQL** running locally
+Dashboard: "Pinned" projects for quick access and status filtering.
 
----
+✅ Task Management
 
-## Backend Setup (Django)
+Task Tracking: Assign tasks to members, set due dates, and toggle completion status.
 
-### 1) Create and activate a virtual environment
+Smart Filtering: Filter by assignee, status, or search text.
 
-```bash
-cd source-code/backend
-python -m venv .venv
-source .venv/bin/activate  # macOS/Linux
-# .venv\\Scripts\\activate   # Windows PowerShell
-```
+Audit Trail: System automatically records who completed a task and when.
 
-### 2) Install dependencies
+💬 Team Communication
 
-```bash
+Project Chat: Integrated discussion threads for every project.
+
+Reactions: Emoji reactions for messages.
+
+Real-time Feel: Optimistic UI updates for instant feedback.
+
+🔔 Notifications
+
+System Alerts: Receive notifications for project invites and assignments.
+
+Background Jobs: Automated management command checks for overdue tasks and flags them.
+
+🛠️ Architecture Highlights
+
+Frontend: The "Golden Pattern"
+
+To ensure scalability, every feature (Projects, Tasks, etc.) follows a strict data flow:
+
+Types: TypeScript interfaces define the contract.
+
+Service: Raw Axios calls handle the network layer.
+
+Hooks: React Query hooks manage caching, loading states, and background refetching.
+
+Components: UI components are purely presentational and consume hooks.
+
+Backend: Modular Design
+
+Signals: Automatic profile creation upon user registration.
+
+Custom Admin: Optimized Django Admin with inline models and autocomplete fields for performance.
+
+Management Commands: Custom scripts to handle background maintenance logic.
+
+🚀 Getting Started
+
+Prerequisites
+
+Node.js (v18+)
+
+Python (v3.10+)
+
+PostgreSQL (or Docker)
+
+1. Backend Setup
+
+# Navigate to backend
+cd backend
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
-```
 
-### 3) Configure environment variables
+# Environment Variables
+# Create a .env file in /backend/config/ based on the template below.
 
-Create a `backend/.env` file:
+# Run Migrations
+python manage.py migrate
 
-```env
-SECRET_KEY=your-secret
+# Create Superuser
+python manage.py createsuperuser
+
+# Run Server
+python manage.py runserver
+
+
+2. Frontend Setup
+
+# Navigate to frontend
+cd frontend
+
+# Install dependencies
+npm install
+
+# Run Development Server
+npm run dev
+
+
+The app will be available at http://localhost:5173.
+
+🐳 Docker Deployment
+
+The project includes a docker-compose.yml for orchestrating the entire stack (Frontend, Backend, Database, Nginx).
+
+# Build and Run
+docker-compose up --build
+
+
+🧪 Testing
+
+The backend includes a comprehensive test suite covering Models, Views, and Auth logic.
+
+cd backend
+python manage.py test
+
+
+⚙️ Environment Variables
+
+Create a .env file in the backend/ directory:
+
+# Django
+SECRET_KEY=your_secret_key_here
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
+ALLOWED_HOSTS=localhost,127.0.0.1,backend
 
-CSRF_TRUSTED_ORIGINS=http://localhost:5173
-CORS_ALLOWED_ORIGINS=http://localhost:5173
-CORS_ALLOW_CREDENTIALS=True
-
+# Database (If using Postgres)
 USE_POSTGRES=True
-DB_NAME=your_db_name
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_HOST=127.0.0.1
+DB_NAME=project_db
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_HOST=db
 DB_PORT=5432
 
-EMAIL_HOST_USER=your_email@example.com
+# Email (For Password Resets)
+EMAIL_HOST_USER=your_email@gmail.com
 EMAIL_HOST_PASSWORD=your_app_password
-DEFAULT_FROM_EMAIL="Your App <your_email@example.com>"
-```
+DEFAULT_FROM_EMAIL=your_email@gmail.com
 
-### 4) Create the database
+# CORS
+CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
 
-```bash
-createdb your_db_name
-```
 
-### 5) Run migrations
+📝 License
 
-```bash
-python manage.py migrate
-```
-
-### 6) Start the server
-
-```bash
-python manage.py runserver
-```
-
-Backend runs at:
-
-```
-http://127.0.0.1:8000
-```
-
----
-
-## Frontend Setup (React)
-
-### 1) Install dependencies
-
-```bash
-cd source-code/frontend
-npm install
-```
-
-### 2) Configure environment variables
-
-Create `frontend/.env`:
-
-```env
-VITE_BASE_URL="http://127.0.0.1:8000"
-```
-
-### 3) Start the dev server
-
-```bash
-npm run dev
-```
-
----
-
-## API Quick Reference
-
-### Auth
-
-* `POST /api/auth/register/`
-* `POST /api/auth/login/`
-* `POST /api/auth/logout/`
-* `GET  /api/auth/users/me/`
-* `POST /api/auth/token/refresh/`
-* `POST /api/auth/password/reset/`
-* `GET  /api/auth/password/reset/confirm/<uidb64>/<token>/`
-* `POST /api/auth/password/reset/confirm/submit/`
-
-### Projects
-
-* `GET    /api/projects/`
-* `POST   /api/projects/`
-* `GET    /api/projects/<id>/`
-* `PUT    /api/projects/<id>/`
-* `PATCH  /api/projects/<id>/`
-* `DELETE /api/projects/<id>/`
-* `POST   /api/projects/<id>/pin/`
-
-Search:
-
-* `GET /api/projects/?search=<query>`
-
----
-
-## Scripts
-
-### Frontend
-
-```bash
-npm run dev
-npm run build
-npm run preview
-npm run lint
-```
-
-### Backend
-
-```bash
-python manage.py runserver
-python manage.py migrate
-python manage.py createsuperuser
-```
-
-## Notes
-
-Assessment project for **FSSD 2025 – Module 5**.
-
+This project is created for the FSSD Module 5 Assessment.

@@ -1,5 +1,5 @@
 import { Plus, Loader2 } from "lucide-react";
-import { Button, type ButtonProps } from "@/components"; // Import ButtonProps to allow passing variants/sizes
+import { Button, type ButtonProps } from "@/components";
 import { useCreateProject } from "../hooks";
 
 interface CreateProjectButtonProps extends ButtonProps {

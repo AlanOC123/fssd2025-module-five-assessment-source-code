@@ -1,6 +1,5 @@
 services:
-
-  # Core launch service
+  # Backend API (Django)
   - type: web
     name: opus-api
     runtime: python
@@ -25,33 +24,13 @@ services:
       - key: USE_POSTGRES
         value: "True"
 
-  # CRON Job for Overdue tasks
-  - type: cron
-    name: check-overdue-tasks
-    runtime: python
-    plan: free
-    schedule: "0 * * * *"   # every hour
-    buildCommand: "cd backend && ./build.sh"
-    startCommand: >
-      cd backend &&
-      python manage.py check_overdue
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: opus_db
-          property: connectionString
-      - key: SECRET_KEY
-        fromService:
-          name: opus-api
-          type: web
-          envVarKey: SECRET_KEY
-
-# Static launch (Frontend)
-staticSites:
-  - name: opus-app
+  # Frontend (Vite/React) as a static site
+  - type: web
+    name: opus-app
+    runtime: static
     plan: free
     buildCommand: "cd frontend && npm ci && npm run build"
-    publishPath: "frontend/dist"
+    staticPublishPath: "frontend/dist"
     routes:
       - type: rewrite
         source: "/*"
@@ -59,8 +38,3 @@ staticSites:
     envVars:
       - key: VITE_API_URL
         value: "https://opus-api.onrender.com"
-
-# Database
-databases:
-  - name: opus_db
-    plan: free

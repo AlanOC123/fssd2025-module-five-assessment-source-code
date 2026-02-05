@@ -15,6 +15,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve
 from django.shortcuts import redirect
 
 # Authentication Views (dj-rest-auth)
@@ -70,6 +71,9 @@ urlpatterns = [
     path("api/tasks/", include("apps.tasks.urls")),
     path("api/chat/", include("apps.chat.urls")),
     path("api/notifications/", include("apps.notifications.urls"))
+
+    # ---4. Production Env Media Serving ---
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
 
 # --- 4. Development Media Serving ---

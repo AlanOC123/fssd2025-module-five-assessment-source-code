@@ -19,6 +19,8 @@ export function UserAvatar({
     lastName = "",
     className = ""
 }: UserAvatarProps) {
+    console.log(`Source: ${src}`)
+
     return src ? (
         <Avatar className={className}>
             <AvatarImage src={src} />

@@ -22,13 +22,22 @@ class UserProfileDetailView(generics.RetrieveUpdateAPIView):
     """
     serializer_class = UserProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = (JSONParser, MultiPartParser, FormParser)
 
     def get_object(self):
         """
         Overridden to return the profile of the currently logged-in user,
         bypassing the need for a 'pk' in the URL.
-        """
+        """ 
+
         return self.request.user.profile
+
+    def update(self, request, *args, **kwargs):
+            print("------ DEBUGGING REQUEST ------")
+            print(f"Content-Type Header: {request.content_type}")
+            print(f"Raw Data (request.data): {request.data}")
+            print("-------------------------------")
+            return super().update(request, *args, **kwargs)
 
 class CustomUserDetailsView(UserDetailsView):
     """

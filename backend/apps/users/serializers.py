@@ -24,32 +24,52 @@ class UserProfileSerializer(serializers.ModelSerializer):
     Instead of nesting the User object (which would look like { profile: { user: { email: ... } } }),
     I 'flattened' the critical user fields (email, id) directly onto the profile object. To make the frontend cleaner.
     """
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+
     user_id = serializers.IntegerField(source="user.pk", read_only=True)
     email = serializers.CharField(source="user.email", read_only=True)
+    avatar = serializers.ImageField(required=False, allow_null=True)
     
     class Meta:
-        model = UserProfile
-        fields = [
-            "id", "email", "first_name", 
-            'last_name', "date_of_birth",
-            "full_name", 'avatar', 'user_id'
-        ]
+            model = UserProfile
+            fields = [
+                "id", "user_id", "email", 
+                "first_name", "last_name", 
+                "date_of_birth", "avatar"
+            ]
+            read_only_fields = ["email", "user_id"]
 
-        read_only_fields = ["full_name"]
+    def to_representation(self, instance):
+        """
+        Required to ensure User model is the source of truth for the first name and last name attributes.
+        """
+        data = super().to_representation(instance)
+        data['first_name'] = instance.user.first_name
+        data['last_name'] = instance.user.last_name
+
+        return data
 
     def update(self, instance, validated_data):
-        """
-        Custom update method to handle profile fields safely.
-        """
-        writeable_fields = ["first_name", "last_name", "date_of_birth", "avatar"]
+            print(f"Validated Data (Finally!): {validated_data}")
 
-        for field in writeable_fields:
-            if field in validated_data:
-                setattr(instance, field, validated_data[field])
-        
-        instance.save()
-        return instance
+            user = instance.user
+            has_user_changes = False
+            
+            # Fields that live on the User model
+            fields_to_write = ['first_name', 'last_name']
 
+            for field in fields_to_write:
+                if field in validated_data:
+                    # 1. Update the User model
+                    setattr(user, field, validated_data[field])
+                    has_user_changes = True
+
+            if has_user_changes:
+                user.save()
+
+            # 2. Update Profile Fields (Avatar, DOB, + legacy names)
+            return super().update(instance, validated_data)
 
 class UserSerializer(serializers.ModelSerializer):
     """

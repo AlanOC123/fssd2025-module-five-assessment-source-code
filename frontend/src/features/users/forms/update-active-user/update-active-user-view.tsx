@@ -14,13 +14,50 @@ import {
     FieldError,
     FieldSeparator,
     FieldLabel,
-    Button
+    Button,
 } from "@/components";
 import type { UpdateActiveUserViewProps } from "../../types";
+import { useEffect, useState } from "react";
 
-export function UpdateActiveUserView({ methods, onSubmit, user, isPending }: UpdateActiveUserViewProps) {
+export function UpdateActiveUserView({
+    methods,
+    onSubmit,
+    user,
+    isPending,
+}: UpdateActiveUserViewProps) {
     const { handleSubmit, register, formState } = methods;
-    const { errors, isSubmitting, isDirty } = formState
+    const { errors, isSubmitting, isDirty } = formState;
+    const [previewUrl, setPreviewURL] = useState<string | null>(null);
+
+    const avatarFile = methods.watch("avatar");
+
+    useEffect(() => {
+        const liveAvatarPreviewUpdate = () => {
+            let newUrl = "";
+
+            if (!avatarFile || avatarFile.length === 0) {
+                setPreviewURL(null);
+                return newUrl;
+            }
+
+            if (avatarFile && avatarFile.length > 0) {
+                const file = avatarFile[0];
+                newUrl = URL.createObjectURL(file);
+
+                setPreviewURL(newUrl);
+            }
+
+            return newUrl;
+        };
+
+        const newUrl = liveAvatarPreviewUpdate();
+
+        return () =>  {
+            if (newUrl) {
+                URL.revokeObjectURL(newUrl)
+            }
+        }
+    }, [avatarFile]);
 
     return (
         <Card>
@@ -34,7 +71,7 @@ export function UpdateActiveUserView({ methods, onSubmit, user, isPending }: Upd
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <FieldGroup className="flex items-center gap-6">
                         <UserAvatar
-                            src={user.avatar}
+                            src={previewUrl || user.avatar}
                             firstName={user.first_name}
                             lastName={user.last_name}
                         />

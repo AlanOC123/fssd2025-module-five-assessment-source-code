@@ -62,7 +62,7 @@ export function NameInputGroup({ name, label, placeholder }: FormInputProps) {
             </FieldLabel>
             <InputGroup
                 className={cn(
-                    "overflow-hidden rounded-lg border",
+                    "overflow-hidden rounded-lg border text-foreground",
                     getInputStateClasses(isError, isSuccess),
                 )}
             >
@@ -140,7 +140,7 @@ export function DateOfBirthInputGroup() {
                 <InputGroupInput
                     id={name}
                     type="date"
-                    className="bg-transparent border-none focus-visible:ring-0 h-11"
+                    className="bg-transparent border-none focus-visible:ring-0 h-11 text-foreground"
                     aria-invalid={isError}
                     {...register(name)}
                 />
@@ -202,7 +202,7 @@ export function EmailInputGroup({ name, label, placeholder }: FormInputProps) {
                     id={name}
                     type="email"
                     placeholder={placeholder}
-                    className="bg-transparent border-none focus-visible:ring-0 placeholder:text-muted-foreground/50 h-11"
+                    className="bg-transparent border-none focus-visible:ring-0 placeholder:text-muted-foreground/50 h-11 text-foreground"
                     aria-invalid={isError}
                     {...register(name)}
                 />

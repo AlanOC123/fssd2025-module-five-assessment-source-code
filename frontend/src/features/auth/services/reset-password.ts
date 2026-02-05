@@ -8,7 +8,7 @@ export const requestPasswordReset = async (
     try {
         const response = await client.post<void>(
             AUTH_ENDPOINTS.passwordResetRequest,
-            { data }
+            data
         );
         return response.data;
     } catch (err) {

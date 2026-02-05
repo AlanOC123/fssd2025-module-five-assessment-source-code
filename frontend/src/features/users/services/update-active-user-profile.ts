@@ -1,13 +1,25 @@
-import { client } from "@/api"
-import { USERS_ENDPOINTS } from "./endpoints"
-import type { UpdateActiveUserRequest, UserProfile } from "../types";
+import { client } from "@/api/client";
+import { USERS_ENDPOINTS } from "./endpoints";
+import type { UserProfile } from "../types";
 
-export async function updateActiveUserProfile({ data }: UpdateActiveUserRequest): Promise<UserProfile> {
+export type UpdateActiveUserRequest = FormData;
+
+export async function updateActiveUserProfile(
+    formData: UpdateActiveUserRequest,
+): Promise<UserProfile> {
     try {
-        const response = await client.patch<UserProfile>(USERS_ENDPOINTS.activeUser, data);
-        return response.data
+        // Now this will log the actual FormData object (not undefined)
+        console.log("Service sending:", formData);
+
+        // Axios automatically sets 'Content-Type: multipart/form-data' when it sees FormData
+        const response = await client.patch<UserProfile>(
+            USERS_ENDPOINTS.activeUser,
+            formData,
+        );
+
+        return response.data;
     } catch (err) {
-        console.error(err);
-        throw err
+        console.error("Service Error:", err);
+        throw err;
     }
 }

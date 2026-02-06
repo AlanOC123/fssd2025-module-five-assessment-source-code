@@ -48,7 +48,7 @@ export function NotificationsSheet({ open, onOpenChange }: NotificationsSheetPro
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent className="w-[400px] sm:w-[540px] flex flex-col h-full p-0">
+            <SheetContent className="w-screen md:w-175 flex flex-col h-full p-0">
                 {/* Header Section */}
                 <SheetHeader className="p-6 pb-2 border-b">
                     <div className="flex items-center justify-between mb-4">

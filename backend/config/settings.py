@@ -227,12 +227,12 @@ if IS_PROD:
     SECURE_SSL_REDIRECT = True
 
     REST_AUTH["JWT_AUTH_SECURE"] = True
-    REST_AUTH["JWT_AUTH_SAMESITE"] = "None"
+    REST_AUTH["JWT_AUTH_SAMESITE"] = "Lax"
 
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SAMESITE = "None"
-    CSRF_COOKIE_SAMESITE = "None"
+    SESSION_COOKIE_SAMESITE = "Lax"
+    CSRF_COOKIE_SAMESITE = "Lax"
 
 
 # --- 7. Production Security Overrides ---
@@ -255,7 +255,7 @@ SECURE_HSTS_PRELOAD = True
 
 
 # --- 8. Email Configuration ---
-# Uses Gmail SMTP for sending password reset emails.
+# Uses Brevo HTTP for sending password reset emails.
 
 EMAIL_BACKEND = config("EMAIL_BACKEND", default="anymail.backends.brevo.EmailBackend")
 EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")

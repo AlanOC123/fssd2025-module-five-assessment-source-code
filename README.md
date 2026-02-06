@@ -28,7 +28,9 @@ Authentication: JWT via dj-rest-auth (HTTPOnly Cookies for security)
 
 Database: PostgreSQL
 
-Async Tasks: Custom Django Management Commands (Overdue Checkers)
+Email: Anymail + Brevo API (HTTP-based delivery)
+
+Async Tasks: HTTP-Triggered Management Commands (External Cron)
 
 ## ✨ Key Features
 
@@ -36,7 +38,7 @@ Async Tasks: Custom Django Management Commands (Overdue Checkers)
 
 Secure Auth: JWT-based authentication stored in HTTPOnly cookies (XSS protection).
 
-Account Management: Sign up, Login, Password Reset (via SMTP email), and Profile Management.
+Account Management: Sign up, Login, Password Reset (via Transactional API), and Profile Management.
 
 Security Gates: Protected Routes on frontend; Permission Classes on backend.
 
@@ -68,7 +70,7 @@ Real-time Feel: Optimistic UI updates for instant feedback.
 
 System Alerts: Receive notifications for project invites and assignments.
 
-Background Jobs: Automated management command checks for overdue tasks and flags them.
+Background Jobs: Automated checks for overdue tasks via secure HTTP triggers.
 
 ## 🛠️ Architecture Highlights
 
@@ -92,6 +94,18 @@ Custom Admin: Optimized Django Admin with inline models and autocomplete fields 
 
 Management Commands: Custom scripts to handle background maintenance logic.
 
+### ☁️ Cloud-Native Adaptations
+
+**1. Firewall-Bypassing Email System:**
+Instead of using standard SMTP (port 587/465)—which is often blocked by cloud providers like Render on free tiers—Opus uses **Django Anymail** coupled with **Brevo**.
+* This converts email requests into standard HTTPS POST requests (Port 443).
+* Guarantees delivery reliability in restrictive firewall environments.
+
+**2. "Wake-up" Cron Architecture:**
+Since free-tier PaaS instances (like Render) spin down after inactivity, internal cron jobs (Celery/Crontab) are unreliable.
+* **Solution:** A secure HTTP endpoint (`/api/cron/trigger/<token>/`) exposes the specific management command.
+* **Execution:** An external service (cron-job.org) pings this endpoint daily. This "wakes up" the server and executes the `check_overdue` command synchronously, ensuring maintenance tasks run even on sleeping dynos.
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -100,7 +114,7 @@ Node.js (v18+)
 
 Python (v3.10+)
 
-PostgreSQL (or Docker)
+PostgreSQL
 
 ### Backend Setup
 
@@ -166,10 +180,14 @@ DB_PASSWORD=postgres
 DB_HOST=db
 DB_PORT=5432
 
-### Email (For Password Resets)
-EMAIL_HOST_USER=your_email@gmail.com
-EMAIL_HOST_PASSWORD=your_app_password
-DEFAULT_FROM_EMAIL=your_email@gmail.com
+### Email (Brevo API)
+# Uses Anymail to bypass SMTP blocking on Render
+BREVO_API_KEY=xkeysib-your-long-api-key
+DEFAULT_FROM_EMAIL=your_verified_email@gmail.com
+
+### Cron Jobs (Production Only)
+# Secret token to authorize external cron triggers
+CRON_SECRET=super-long-random-string-for-security
 
 ### CORS
 CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
@@ -178,3 +196,5 @@ CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
 ## 📝 License
 
 This project is created for the FSSD Module 5 Assessment.
+
+Please look through the codebase provided to get a full read.

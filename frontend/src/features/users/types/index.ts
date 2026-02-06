@@ -28,7 +28,7 @@ export interface UpdateActiveUserRequest {
 }
 
 export interface UserAvatarProps {
-    src?: string | null;
+    src?: string | undefined;
     firstName?: string;
     lastName?: string;
     className?: string

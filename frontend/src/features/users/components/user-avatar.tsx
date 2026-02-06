@@ -14,22 +14,18 @@ function getUserInitials(
 }
 
 export function UserAvatar({
-    src,
+    src = "",
     firstName = "",
     lastName = "",
     className = ""
 }: UserAvatarProps) {
-    console.log(`Source: ${src}`)
+        return (
+            <Avatar className={className}>
+                <AvatarImage src={src} />
 
-    return src ? (
-        <Avatar className={className}>
-            <AvatarImage src={src} />
-        </Avatar>
-    ) : (
-        <Avatar>
-            <AvatarFallback className={className}>
-                {getUserInitials(firstName, lastName)}
-            </AvatarFallback>
-        </Avatar>
-    );
+                <AvatarFallback>
+                    {getUserInitials(firstName, lastName)}
+                </AvatarFallback>
+            </Avatar>
+        );
 }

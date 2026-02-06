@@ -17,6 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
 from django.shortcuts import redirect
+from apps.core.views import trigger_daily_cron
 
 # Authentication Views (dj-rest-auth)
 from dj_rest_auth.views import (
@@ -74,6 +75,9 @@ urlpatterns = [
 
     # ---4. Production Env Media Serving ---
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+
+    # --- 5. CRON Job Trigger ---
+    path("api/cron/trigger/<str:token>/", trigger_daily_cron)
 ]
 
 # --- 4. Development Media Serving ---

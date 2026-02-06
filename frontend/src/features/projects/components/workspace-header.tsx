@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { useProjectWorkspace } from "../hooks";
 import { useState } from "react";
 import { ShareProjectModal } from "./share-project-modal";
+import { APP_PATHS } from "@/router";
 
 export function WorkspaceHeader() {
     const navigate = useNavigate();
@@ -34,7 +35,7 @@ export function WorkspaceHeader() {
                     variant="ghost"
                     size="icon"
                     className="shrink-0 -ml-2"
-                    onClick={() => navigate("/projects")}
+                    onClick={() => navigate(APP_PATHS.app.root)}
                 >
                     <ChevronLeft className="w-5 h-5 text-muted-foreground" />
                 </Button>

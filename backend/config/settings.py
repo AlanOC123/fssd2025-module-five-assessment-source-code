@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
-CRON_SECRET_KEY=config("CRON_SECRET_KEY")
+CRON_SECRET_KEY = config("CRON_SECRET_KEY", default="")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 ENVIRONMENT = config("ENVIRONMENT", default="development")
@@ -34,6 +34,7 @@ IS_PROD = ENVIRONMENT == "production"
 DEBUG = config("DEBUG", default=not IS_PROD, cast=bool)
 
 # Hosts configuration
+# NOTE: Ensure 'opus-app.onrender.com' is included here in your .env!
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default="localhost", cast=csv_list)
 
 STATIC_URL = "static/"
@@ -169,6 +170,7 @@ CSRF_COOKIE_HTTPONLY = False  # Allows frontend to read the CSRF token if necess
 CORS_ALLOW_CREDENTIALS = config("CORS_ALLOW_CREDENTIALS", default=True, cast=bool)
 
 # Origins that are trusted to make requests
+# NOTE: Ensure your Frontend URL (https://opus-app.onrender.com) is in .env!
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', ["http://localhost:5173"], cast=csv_list)
 CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', ["http://localhost:5173"], cast=csv_list)
 
@@ -178,7 +180,7 @@ CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', ["http://localhost:5173"],
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), # Short-lived access token
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),    # Long-lived refresh token
-    'ROTATE_REFRESH_TOKENS': False,                  # Security: New refresh token on every use
+    'ROTATE_REFRESH_TOKENS': False,                 # Security: New refresh token on every use
     'AUTH_HEADER_TYPES': ('Bearer',),
     'BLACKLIST_AFTER_ROTATION': False,
     'REFRESH_TOKEN_LEEWAY': 20,
@@ -202,7 +204,7 @@ PASSWORD_RESET_REDIRECT_LINK = config(
 REST_AUTH = {
     # Custom Serializers (Injecting our custom logic)
     'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
-    'REGISTER_SERIALIZER': 'apps.users.serializers.CustomRegisterSerializer', # <-- Our custom Registration
+    'REGISTER_SERIALIZER': 'apps.users.serializers.CustomRegisterSerializer',
     'USER_DETAILS_SERIALIZER': 'apps.users.serializers.UserSerializer',
 
     # Configuration Flags
@@ -216,70 +218,64 @@ REST_AUTH = {
     'JWT_AUTH_REFRESH_COOKIE': 'refresh-token', # Name of the refresh cookie
     'JWT_AUTH_REFRESH_COOKIE_PATH': '/',
     
-    # Security Settings (Toggled based on environment below)
-    'JWT_AUTH_SECURE': False, # False for Dev (HTTP), True for Prod (HTTPS)
-    'JWT_AUTH_HTTPONLY': True, # JS cannot read this (XSS Protection)
+    # Default Security Settings (Overridden in PROD below)
+    'JWT_AUTH_SECURE': False, 
+    'JWT_AUTH_HTTPONLY': True, 
     'JWT_AUTH_SAMESITE': 'Lax',
 }
 
+
+# --- 7. Production Security Overrides ---
+# If DEBUG is False (Production), enforce HTTPS, Secure Cookies, and Render Proxy logic.
+
 if IS_PROD:
+    # --- A. PROXY & HOST CONFIGURATION ---
+    # Trust Render's Load Balancer headers so Django knows it's on the frontend domain.
     USE_X_FORWARDED_HOST = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = True
+    
+    # --- B. COOKIE DOMAIN FIX (Crucial for Mobile/Safari) ---
+    # We hardcode the cookie domain to the FRONTEND to prevent "Third Party" blocking.
+    # The browser will accept this because it matches the URL bar.
+    REST_AUTH['JWT_AUTH_COOKIE_DOMAIN'] = 'opus-app.onrender.com'
 
+    # --- C. COOKIE SECURITY ---
+    # Use 'Lax' + 'Secure' because the Proxy makes frontend/backend appear as Same Origin.
     REST_AUTH["JWT_AUTH_SECURE"] = True
-    REST_AUTH["JWT_AUTH_SAMESITE"] = "Lax"
+    REST_AUTH["JWT_AUTH_SAMESITE"] = 'Lax'
 
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SAMESITE = "Lax"
-    CSRF_COOKIE_SAMESITE = "Lax"
-
-
-# --- 7. Production Security Overrides ---
-# If DEBUG is False (Production), enforce HTTPS and Secure Cookies.
-
-if IS_PROD:
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    REST_AUTH["JWT_AUTH_SECURE"] = True
+    
+    # 'Lax' is required for the Rewrite/Proxy strategy (Safari blocks 'None' on same-origin)
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    CSRF_COOKIE_SAMESITE = 'Lax'
+    
     CORS_ALLOW_CREDENTIALS = True
-    SESSION_COOKIE_SAMESITE = 'None'
-    CSRF_COOKIE_SAMESITE = 'None'
 
-# Render recommendations
-SECURE_HSTS_SECONDS = 3600
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+    # --- D. SECURITY HEADERS ---
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
-
-# --- 8. Email Configuration ---
-# Uses Brevo HTTP for sending password reset emails.
-
-EMAIL_BACKEND = config("EMAIL_BACKEND", default="anymail.backends.brevo.EmailBackend")
-EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")
-EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
-EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
-EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=False, cast=bool)
-
-if IS_PROD:
+    # --- E. EMAIL (Anymail + Brevo) ---
+    # HTTP-based email sending to bypass Render's SMTP port blocks.
     EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
     DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
-
-    # Anymail API KEY for Brevo
     ANYMAIL = {
         "BREVO_API_KEY": config("BREVO_API_KEY")
     }
+
 else:
+    # --- DEVELOPMENT EMAIL ---
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
     EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
     DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="dev@localhost")
 
 
-# --- 9. Internationalization & Static Files ---
+# --- 8. Internationalization & Static Files ---
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'

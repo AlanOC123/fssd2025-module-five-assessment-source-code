@@ -91,7 +91,7 @@ export function WorkspaceHeader() {
                     variant="ghost"
                     size="icon"
                     className="sm:hidden text-primary"
-                    onClick={() => console.log("Open Share Modal")}
+                    onClick={() => setShareOpen(true)}
                 >
                     <Share2 className="w-5 h-5" />
                 </Button>

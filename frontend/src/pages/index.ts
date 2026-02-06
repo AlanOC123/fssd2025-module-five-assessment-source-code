@@ -5,3 +5,7 @@ export * from './reset-password-page';
 export * from './confirm-password-reset-page'
 export * from './settings-page';
 export * from './project-workspace-page';
+export * from './about-page';
+export * from './contact-page';
+export * from './sitemap-page';
+export * from './not-found-page';

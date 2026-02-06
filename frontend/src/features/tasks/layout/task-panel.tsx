@@ -41,7 +41,7 @@ export function TasksPanel() {
     if (!project) return null;
 
     return (
-        <div className="flex flex-col h-full bg-background relative">
+        <div className="flex flex-col flex-wrap h-full bg-background relative animate-in fade-in-50 slide-in-from-top-4 duration-500">
             {/* --- HEADER & FILTERS --- */}
             <div className="px-6 py-4 border-b flex flex-col gap-4 shrink-0">
                 <div className="flex items-center justify-between">

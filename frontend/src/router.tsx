@@ -9,6 +9,10 @@ import {
     RegisterPage,
     ResetPasswordPage,
     ConfirmPasswordResetPage,
+    AboutPage,
+    SitemapPage,
+    ContactPage,
+    NotFoundPage
 } from "@/pages";
 
 const AUTH_ROOT = "auth";
@@ -30,6 +34,12 @@ export const APP_PATHS = {
         root: "/",
 
         settings: "/settings",
+
+        about: "/about",
+
+        contact: "/contact",
+
+        sitemap: "/sitemap",
 
         project: (id: number) => `/projects/${id}`,
     },
@@ -63,9 +73,12 @@ export const router = createBrowserRouter([
                         element: <ProjectWorkspacePage />,
                     },
                     { path: "settings", element: <SettingsPage /> },
+                    { path: "about", element: <AboutPage /> },
+                    { path: "sitemap", element: <SitemapPage /> },
+                    { path: "contact", element: <ContactPage /> },
                 ],
             },
-            { path: "*", element: <Navigate to="/" replace /> },
+            { path: "*", element: <NotFoundPage /> },
         ],
     },
 ]);

@@ -1,10 +1,10 @@
 import { Outlet } from "react-router";
-import { ProtectedRoute, AppHeader } from "@/components";
+import { ProtectedRoute, AppHeader, AppFooter } from "@/components";
 import { NotificationsSheet } from "@/features";
 import { useState } from "react";
 
 export function AppLayout() {
-    const [notificationsOpen, setNotificationsOpen] = useState(false)
+    const [notificationsOpen, setNotificationsOpen] = useState(false);
 
     return (
         <ProtectedRoute>
@@ -19,8 +19,16 @@ export function AppLayout() {
                     onOpenChange={setNotificationsOpen}
                 />
                 {/* Main Content Area */}
-                <main className="flex-1 min-h-0 relative">
-                    <Outlet />
+                <main className="flex-1 overflow-y-auto scroll-smooth">
+                    <div className="flex flex-col min-h-full">
+                        {/* Page Content */}
+                        <div className="flex-1 h-full flex flex-col">
+                            <Outlet />
+                        </div>
+                        <div className="pb-24 md:pb-0">
+                            <AppFooter />
+                        </div>
+                    </div>
                 </main>
             </div>
         </ProtectedRoute>

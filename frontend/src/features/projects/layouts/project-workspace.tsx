@@ -11,11 +11,11 @@ function WorkspaceLayoutContent() {
     const { activeTab, setActiveTab } = useProjectWorkspace();
 
     return (
-        <div className="flex flex-col h-full bg-background text-foreground">
+        <div className="flex flex-col flex-1 bg-background text-foreground">
             <WorkspaceHeader />
 
-            <div className="flex-1 overflow-hidden relative">
-                <div className="hidden lg:grid grid-cols-12 h-full divide-x">
+            <div className="flex-1 flex flex-col overflow-hidden relative">
+                <div className="hidden flex-1 lg:grid grid-cols-12 h-full divide-x">
                     <div className="col-span-3 overflow-y-auto bg-muted/5">
                         <ProjectInfoPanel />
                     </div>
@@ -31,7 +31,7 @@ function WorkspaceLayoutContent() {
 
                 {/* MOBILE: Tabbed View */}
                 {/* Visible on mobile, Hidden on lg screens */}
-                <div className="lg:hidden h-full overflow-y-auto pb-20">
+                <div className="lg:hidden flex-1 h-full overflow-y-auto min-h-175">
                     {activeTab === "info" && <ProjectInfoPanel />}
                     {activeTab === "tasks" && <TasksPanel />}
                     {activeTab === "chat" && <ChatPanel />}

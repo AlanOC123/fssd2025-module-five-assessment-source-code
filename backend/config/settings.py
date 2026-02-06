@@ -177,8 +177,10 @@ CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', ["http://localhost:5173"],
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), # Short-lived access token
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),    # Long-lived refresh token
-    'ROTATE_REFRESH_TOKENS': True,                  # Security: New refresh token on every use
+    'ROTATE_REFRESH_TOKENS': False,                  # Security: New refresh token on every use
     'AUTH_HEADER_TYPES': ('Bearer',),
+    'BLACKLIST_AFTER_ROTATION': False,
+    'REFRESH_TOKEN_LEEWAY': 20,
 }
 
 
@@ -241,6 +243,9 @@ if IS_PROD:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     REST_AUTH["JWT_AUTH_SECURE"] = True
+    CORS_ALLOW_CREDENTIALS = True
+    SESSION_COOKIE_SAMESITE = 'None'
+    CSRF_COOKIE_SAMESITE = 'None'
 
 # Render recommendations
 SECURE_HSTS_SECONDS = 3600

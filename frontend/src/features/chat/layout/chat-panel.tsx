@@ -9,7 +9,7 @@ export function ChatPanel() {
     if (!project) return null;
 
     return (
-        <div className="flex flex-col h-full bg-background border-l w-full overflow-hidden">
+        <div className="flex flex-col h-full bg-background border-l w-full overflow-hidden animate-in fade-in-50 slide-in-from-left-4 duration-500">
             {/* Header: Fixed size */}
             <div className="p-4 border-b flex items-center justify-between bg-muted/5 shrink-0">
                 <div className="flex items-center gap-2">

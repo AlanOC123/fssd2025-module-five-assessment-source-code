@@ -80,6 +80,6 @@ class NotificationSerializer(serializers.ModelSerializer):
             if request:
                 # build_absolute_uri adds 'http://localhost:8000/...' 
                 return request.build_absolute_uri(obj.actor.profile.avatar.url)
-            return obj.actor.profile.avatar.url
+            return obj.actor.profile.avatar
 
         return None

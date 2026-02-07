@@ -34,7 +34,6 @@ IS_PROD = ENVIRONMENT == "production"
 DEBUG = config("DEBUG", default=not IS_PROD, cast=bool)
 
 # Hosts configuration
-# NOTE: Ensure 'opus-app.onrender.com' is included here in your .env!
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default="localhost", cast=csv_list)
 
 STATIC_URL = "static/"
@@ -170,7 +169,6 @@ CSRF_COOKIE_HTTPONLY = False  # Allows frontend to read the CSRF token if necess
 CORS_ALLOW_CREDENTIALS = config("CORS_ALLOW_CREDENTIALS", default=True, cast=bool)
 
 # Origins that are trusted to make requests
-# NOTE: Ensure your Frontend URL (https://opus-app.onrender.com) is in .env!
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', ["http://localhost:5173"], cast=csv_list)
 CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', ["http://localhost:5173"], cast=csv_list)
 
@@ -238,7 +236,7 @@ if IS_PROD:
     # --- B. COOKIE DOMAIN FIX (Crucial for Mobile/Safari) ---
     # We hardcode the cookie domain to the FRONTEND to prevent "Third Party" blocking.
     # The browser will accept this because it matches the URL bar.
-    REST_AUTH['JWT_AUTH_COOKIE_DOMAIN'] = 'opus-app.onrender.com'
+    REST_AUTH['JWT_AUTH_COOKIE_DOMAIN'] = config("JWT_AUTH_COOKIE_DOMAIN")
 
     # --- C. COOKIE SECURITY ---
     # Use 'Lax' + 'Secure' because the Proxy makes frontend/backend appear as Same Origin.
